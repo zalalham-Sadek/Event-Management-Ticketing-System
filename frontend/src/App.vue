@@ -1,11 +1,14 @@
 <script setup></script>
 
 <template>
-  <h1>You did it!</h1>
-  <p>
-    Visit <a href="https://vuejs.org/" target="_blank" rel="noopener">vuejs.org</a> to read the
-    documentation
-  </p>
+  <div class="min-h-screen flex flex-col items-center justify-center bg-gray-100 p-4">
+    <h1 class="text-4xl font-bold text-blue-600 mb-4">You did it!</h1>
+    <p class="text-gray-700 text-lg">
+      Visit 
+      <a href="https://vuejs.org/" target="_blank" rel="noopener" class="text-blue-500 underline hover:text-blue-700">
+        vuejs.org
+      </a> 
+      to read the documentation
+    </p>
+  </div>
 </template>
-
-<style scoped></style>
