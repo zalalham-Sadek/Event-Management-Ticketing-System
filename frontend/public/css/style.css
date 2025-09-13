@@ -1,1 +1,45 @@
 @import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  /* Light mode colors */
+  --color-bg: #ffffff;
+  --color-text: #1f2937;   /* gray-800 */
+  --color-primary: #2563eb; /* blue-600 */
+  --color-primary-hover: #1d4ed8; /* blue-700 */
+  --color-muted: #6b7280;  /* gray-500 */
+
+  /* Dark mode overrides */
+ 
+}
+
+@layer base {
+     .dark {
+    --color-bg: #0f172a;       /* slate-900 */
+    --color-text: #f1f5f9;     /* slate-100 */
+    --color-primary: #3b82f6;  /* lighter blue */
+    --color-primary-hover: #60a5fa; /* blue-400 */
+    --color-muted: #94a3b8;    /* slate-400 */
+  }
+  body {
+    @apply bg-[var(--color-bg)] text-[var(--color-text)];
+    transition: background-color 0.3s, color 0.3s;
+  }
+}
+
+.nav-link {
+  @apply block px-3 py-2 transition;
+  color: var(--color-muted);
+}
+.nav-link:hover {
+  color: var(--color-primary);
+}
+.btn-primary {
+  @apply px-4 py-2 rounded-lg shadow transition;
+  background-color: var(--color-primary);
+  color: white;
+}
+.btn-primary:hover {
+  background-color: var(--color-primary-hover);
+}
