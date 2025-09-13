@@ -83,6 +83,4 @@ npm run dev
 
 
 
----
 
-Do you want me to also generate a ready-to-use **`CONTRIBUTING.md`** and **GitHub issue template** so your repo looks like a polished open-source project?
