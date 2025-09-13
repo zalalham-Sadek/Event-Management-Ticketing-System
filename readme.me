@@ -1,0 +1,67 @@
+# 🎟️ Event Management and Ticketing System
+
+An **Event Management and Ticketing System** built with a **frontend** and **backend** separation for scalability, maintainability, and modular development.  
+The system allows users to browse events, purchase tickets, and organizers to manage their events efficiently.
+
+---
+
+## ⚡ Tech Stack
+
+### 🔹 Backend
+- **Framework:** Laravel  
+- **Database:** MySQL  
+- **Authentication:** Laravel Sanctum / JWT  
+- **API:** RESTful (JSON-based)  
+
+### 🔹 Frontend
+- **Framework:** Vue.js  
+- **UI:** TailwindCSS / Custom CSS  
+- **API Handling:** Axios / Fetch  
+
+---
+
+## 📂 Project Structure
+
+Event-Management-Ticketing-System/
+│── backend/ # Backend (Laravel API, authentication, database)
+│── frontend/ # Frontend (Vue.js, UI, API integration)
+│── README.md # Project documentation
+
+
+
+---
+
+## 🚀 Installation & Setup
+
+### 1️⃣ Clone Repository
+```bash
+git clone https://github.com/zalalham-Sadek/Event-Management-Ticketing-System.git
+cd Event-Management-Ticketing-System
+
+### 2️⃣ Setup Backend
+cd backend
+
+# Install dependencies
+composer install
+
+# Create environment file
+cp .env.example .env
+
+# Configure .env with your database credentials
+
+# Run migrations
+php artisan migrate
+
+# Start server
+php artisan serve
+
+
+3️⃣ Setup Frontend
+
+cd frontend
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
