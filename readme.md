@@ -30,7 +30,10 @@ The system allows users to browse events, purchase tickets, and organizers to ma
 
 ## 📂 Project Structure
 
-
+Event-Management-Ticketing-System/
+├── backend/ # Backend (Laravel API, authentication, database)
+├── frontend/ # Frontend (Vue.js, UI, API integration)
+└── README.md # Project documentation
 
 
 ---
@@ -42,6 +45,9 @@ The system allows users to browse events, purchase tickets, and organizers to ma
 git clone https://github.com/zalalham-Sadek/Event-Management-Ticketing-System.git
 cd Event-Management-Ticketing-System
 
+2️⃣ Setup Backend
+
+|# Run these commands from the backend/ folder.
 
 cd backend
 
@@ -64,7 +70,9 @@ php artisan migrate
 php artisan serve --host=127.0.0.1 --port=8000
 
 
+3️⃣ Setup Frontend
 
+|# Run these commands from the frontend/ folder.
 cd frontend
 
 # Install Node.js dependencies
