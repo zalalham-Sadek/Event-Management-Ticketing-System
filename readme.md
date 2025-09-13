@@ -44,11 +44,13 @@ Event-Management-Ticketing-System/
 ```bash
 git clone https://github.com/zalalham-Sadek/Event-Management-Ticketing-System.git
 cd Event-Management-Ticketing-System
+```
+---
 
-2️⃣ Setup Backend
-
+### 2️⃣ Setup Backend
 |# Run these commands from the backend/ folder.
 
+```bash
 cd backend
 
 # Install PHP dependencies
@@ -68,11 +70,13 @@ php artisan migrate
 
 # Start Laravel development server
 php artisan serve --host=127.0.0.1 --port=8000
+```
 
 
-3️⃣ Setup Frontend
+### 3️⃣ Setup Frontend
 
 |# Run these commands from the frontend/ folder.
+```bash
 cd frontend
 
 # Install Node.js dependencies
@@ -80,7 +84,7 @@ npm install
 
 # Start development server
 npm run dev
-
+```
 
 
 
