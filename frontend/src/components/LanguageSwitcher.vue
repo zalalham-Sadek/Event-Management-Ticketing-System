@@ -1,7 +1,7 @@
 <template>
   <button
     @click="toggleLanguage"
-    class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 transition"
+    class="p-2 rounded hover:bg-gray-200 dark:hover:bg-gray-700 text-[var(--color-accent)] transition"
     :title="`Switch to ${otherLanguage.toUpperCase()}`"
   >
     <svg
