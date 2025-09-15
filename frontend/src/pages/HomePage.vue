@@ -59,9 +59,11 @@
     </section>
 
 <EventCat />
+<EventByCity/>
 </template>
 
 <script setup>
 import BtnDiscover from '@/components/BtnDiscover.vue';
 import EventCat from '@/components/EventCat.vue';
+import EventByCity from '@/components/EventByCity.vue';
 </script>

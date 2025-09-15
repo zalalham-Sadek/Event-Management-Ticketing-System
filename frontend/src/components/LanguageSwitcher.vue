@@ -46,6 +46,7 @@ const toggleLanguage = () => {
 
   document.documentElement.lang = selectedLanguage.value;
   document.documentElement.dir = selectedLanguage.value === "ar" ? "rtl" : "ltr";
+  window.location.reload();
 };
 </script>
 
