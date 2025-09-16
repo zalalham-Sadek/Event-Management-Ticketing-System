@@ -2,43 +2,41 @@
   <section class="py-10 bg-[#f7f9fd] dark:bg-[#1f2937]">
     <div class="max-w-6xl mx-auto relative">
       
-
       <!-- Left Arrow -->
-<button
-  @click="isRTL ? swiper.slideNext() : swiper.slidePrev()"
-  :class="[
-    'absolute top-1/2 -translate-y-1/2 bg-[var(--color-primary)] text-white w-8 h-8 md:w-8 md:h-8 flex items-center justify-center rounded-full shadow-lg z-10 hover:bg-[var(--color-primary-hover)]',
-    isRTL ? 'right-2 md:right-0' : 'left-2 md:left-0'
-  ]"
->
-  <span>&#10095;</span>
-</button>
+      <button
+        @click="isRTL ? swiper.slideNext() : swiper.slidePrev()"
+        :class="[
+          'absolute top-1/2 -translate-y-1/2 bg-[var(--color-primary)] text-white w-8 h-8 md:w-8 md:h-8 flex items-center justify-center rounded-full shadow-lg z-10 hover:bg-[var(--color-primary-hover)]',
+          isRTL ? 'right-2 md:right-0' : 'left-2 md:left-0'
+        ]"
+      >
+        <span>&#10095;</span>
+      </button>
 
-<!-- Right Arrow -->
-<button
-  @click="isRTL ? swiper.slidePrev() : swiper.slideNext()"
-  :class="[
-    'absolute top-1/2 -translate-y-1/2 bg-[var(--color-primary)] text-white w-8 h-8 md:w-8 md:h-8 flex items-center justify-center rounded-full shadow-lg z-10 hover:bg-[var(--color-primary-hover)]',
-    isRTL ? 'left-2 md:left-0' : 'right-2 md:right-0'
-  ]"
->
-  <span>&#10094;</span>
-</button>
-
+      <!-- Right Arrow -->
+      <button
+        @click="isRTL ? swiper.slidePrev() : swiper.slideNext()"
+        :class="[
+          'absolute top-1/2 -translate-y-1/2 bg-[var(--color-primary)] text-white w-8 h-8 md:w-8 md:h-8 flex items-center justify-center rounded-full shadow-lg z-10 hover:bg-[var(--color-primary-hover)]',
+          isRTL ? 'left-2 md:left-0' : 'right-2 md:right-0'
+        ]"
+      >
+        <span>&#10094;</span>
+      </button>
 
       <!-- Swiper -->
       <Swiper
         :modules="[Autoplay]"
-        :slides-per-view="5"
-        :space-between="20"
+        :slides-per-view="6"
+        :space-between="10" 
         :loop="true"
         :autoplay="{ delay: 2000, disableOnInteraction: false }"
         :speed="2000"
         :breakpoints="{
-          320: { slidesPerView: 2 },
-          640: { slidesPerView: 3 },
-          1024: { slidesPerView: 4 },
-          1280: { slidesPerView: 5 }
+          320: { slidesPerView: 2, spaceBetween: 5 },
+          640: { slidesPerView: 3, spaceBetween: 8 },
+          1024: { slidesPerView: 5, spaceBetween: 10 },
+          1280: { slidesPerView: 6, spaceBetween: 10 }  
         }"
         @swiper="onSwiper"
         class="overflow-hidden"
@@ -48,7 +46,7 @@
             <img
               :src="category.image"
               :alt="category.name"
-              class="w-36 h-36 sm:w-40 sm:h-40 md:w-48 md:h-48 
+              class="w-25 h-25 sm:w-25 sm:h-25 md:w-25 md:h-25 
                      object-cover rounded-full 
                      transition-transform duration-300 
                      group-hover:scale-105 mx-auto"
@@ -75,16 +73,15 @@ const swiper = ref(null)
 const onSwiper = (s) => { swiper.value = s }
 
 // Detect RTL mode
-const isRTL = computed(() => document.dir === "rtl")
 
 const categories = [
-  { name: "Music Concerts", image: "/images/1.jpg" },
-  { name: "Sports", image: "/images/2.jpg" },
-  { name: "Theatre & Plays", image: "/images/3.jpg" },
-  { name: "Workshops", image: "/images/4.jpg" },
-  { name: "Festivals", image: "/images/5.jpg" },
-  { name: "Adssc & Plays", image: "/images/6.jpg" },
-  { name: "Tehtr", image: "/images/7.jpg" },
-  { name: "Trwy", image: "/images/8.jpg" },
+  { name: "Music Concerts", image: "/images/events/1.jpg" },
+  { name: "Sports", image: "/images/events/2.jpg" },
+  { name: "Theatre & Plays", image: "/images/events/3.jpg" },
+  { name: "Workshops", image: "/images/events/4.jpg" },
+  { name: "Festivals", image: "/images/events/5.jpg" },
+  { name: "Adssc & Plays", image: "/images/events/6.jpg" },
+  { name: "Tehtr", image: "/images/events/7.jpg" },
+  { name: "Trwy", image: "/images/events/8.jpg" },
 ]
 </script>
