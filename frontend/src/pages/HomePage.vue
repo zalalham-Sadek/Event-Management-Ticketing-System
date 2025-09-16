@@ -60,10 +60,26 @@
 
 <EventCat />
 <EventByCity/>
+<FeatureEventSection/>
+<HowWork/>
+<Soon/>
+<FeatureOrganizers/>
+<TestimonialsSection/>
+<StatisticsSection/>
+<Footer/>
+
 </template>
 
 <script setup>
 import BtnDiscover from '@/components/BtnDiscover.vue';
 import EventCat from '@/components/EventCat.vue';
 import EventByCity from '@/components/EventByCity.vue';
+import FeatureEventSection from '@/components/FeatureEventSection.vue';
+import StatisticsSection from '@/components/StatisticsSection.vue';
+import HowWork from '@/components/HowWork.vue';
+import Soon from '@/components/Soon.vue';
+import FeatureOrganizers from '@/components/FeatureOrganizers.vue';
+import TestimonialsSection from '@/components/TestimonialsSection.vue';
+import Footer from '@/components/Footer.vue';
+
 </script>
