@@ -4,10 +4,9 @@
       
       <!-- Left Arrow -->
       <button
-        @click="isRTL ? swiper.slideNext() : swiper.slidePrev()"
+        @click=" swiper.slidePrev()"
         :class="[
           'absolute top-1/2 -translate-y-1/2 bg-[var(--color-primary)] text-white w-8 h-8 md:w-8 md:h-8 flex items-center justify-center rounded-full shadow-lg z-10 hover:bg-[var(--color-primary-hover)]',
-          isRTL ? 'right-2 md:right-0' : 'left-2 md:left-0'
         ]"
       >
         <span>&#10095;</span>
@@ -15,10 +14,9 @@
 
       <!-- Right Arrow -->
       <button
-        @click="isRTL ? swiper.slidePrev() : swiper.slideNext()"
+        @click=" swiper.slideNext()"
         :class="[
           'absolute top-1/2 -translate-y-1/2 bg-[var(--color-primary)] text-white w-8 h-8 md:w-8 md:h-8 flex items-center justify-center rounded-full shadow-lg z-10 hover:bg-[var(--color-primary-hover)]',
-          isRTL ? 'left-2 md:left-0' : 'right-2 md:right-0'
         ]"
       >
         <span>&#10094;</span>

@@ -1,6 +1,6 @@
 <template>
-    <section class="py-12 my-5 px-6 bg-[#f7f9fd] dark:bg-[#1f2937]">
-        <div class="max-w-7xl mx-auto">
+   <section class="py-12 my-5 px-6 bg-[#f7f9fd] dark:bg-[#1f2937]">
+    <div class="max-w-6xl mx-auto">
         <!-- ✅ Reusable Header -->
         <SectionHeader
             title="What Our Attendees Say"
