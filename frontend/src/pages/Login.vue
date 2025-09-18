@@ -1,7 +1,9 @@
 <template>
-  <div class="min-h-screen flex">
+  <div class="min-h-screen flex flex-col lg:flex-row rtl:flex-row-reverse">
     <!-- Left side - Background Image (Larger) -->
-    <ImgSign/>
+    <div class="hidden lg:block lg:w-2/3">
+      <ImgSign/>
+    </div>
 
     <!-- Right side - Login Form (Smaller) -->
     <div class="w-full lg:w-1/3 flex items-center justify-center p-8 bg-[#f7f9fd] dark:bg-[#1f2937]">
@@ -50,7 +52,7 @@
             <button
               type="button"
               @click="togglePasswordVisibility"
-              class="absolute right-3 top-11 flex items-center z-10"
+              class="absolute right-3 rtl:left-3 rtl:right-auto top-11 flex items-center z-10"
             >
               <svg v-if="!showPassword" class="h-5 w-5 text-gray-400 dark:text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -71,7 +73,7 @@
                 type="checkbox"
                 class="h-4 w-4 text-purple-600 focus:ring-purple-500 border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700"
               />
-              <label for="remember" class="ml-2 text-sm text-gray-700 dark:text-gray-300">
+              <label for="remember" class="ml-2 rtl:ml-0 rtl:mr-2 text-sm text-gray-700 dark:text-gray-300">
                 {{$t('Remember Me')}}
               </label>
             </div>
