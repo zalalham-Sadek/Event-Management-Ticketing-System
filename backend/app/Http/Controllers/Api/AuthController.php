@@ -5,9 +5,57 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Password;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
+    public function checkSetup()
+    {
+        $adminExists = User::where('role', 'Admin')->exists();
+
+        return response()->json([
+            'admin_exists' => $adminExists,
+            'message' => $adminExists
+                ? 'admin exist'
+                : 'no admin, create admin first'
+        ]);
+    }
+
+    // ✅ إنشاء أول Admin
+    public function setAdmin(Request $request)
+    {
+        // إذا كان فيه Admin موجود بالفعل
+        if (User::where('role', 'Admin')->exists()) {
+            return response()->json([
+                'message' => 'there is already admin'
+            ], 403);
+        }
+
+        $data = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users',
+            'password' => 'required|string|min:6',
+            'phone' => 'nullable|string|max:20',
+        ]);
+
+        $admin = User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => $data['password'], // Laravel هيعمله hash تلقائي
+            'phone' => $data['phone'] ?? null,
+            'role' => 'Admin',
+        ]);
+
+        $token = $admin->createToken('api-token')->plainTextToken;
+
+        return response()->json([
+            'message' => 'admin setup successfully',
+            'user' => $admin,
+            'token' => $token
+        ], 201);
+    }
+
     // تسجيل مستخدم جديد
     public function register(Request $request)
     {
@@ -18,16 +66,14 @@ class AuthController extends Controller
             'phone' => 'nullable|string|max:20',
         ]);
 
-        // إنشاء المستخدم بدور افتراضي Attendee
         $user = User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'password' => $data['password'], // سيُحوّل تلقائياً إلى hashed
+            'password' => $data['password'],
             'phone' => $data['phone'] ?? null,
             'role' => 'Attendee',
         ]);
 
-        // إنشاء Token
         $token = $user->createToken('api-token')->plainTextToken;
 
         return response()->json([
@@ -59,16 +105,14 @@ class AuthController extends Controller
         ]);
     }
 
-     public function logout(Request $request)
+    public function logout(Request $request)
     {
         $user = $request->user();
-        // حذف جميع التوكنات الخاصة بالمستخدم
         $user->tokens()->delete();
 
         return response()->json(['message' => 'تم تسجيل الخروج بنجاح']);
     }
 
-    // نسيت كلمة المرور
     public function forgotPassword(Request $request)
     {
         $request->validate(['email' => 'required|email']);
