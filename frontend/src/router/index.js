@@ -2,12 +2,44 @@ import { createRouter,createWebHashHistory } from "vue-router";
 import Home from "@/pages/HomePage.vue";
 import Login from "@/pages/Login.vue";
 import Register from "@/pages/Register.vue";
-
+import LayoutPage from "@/pages/Layout.vue";
+import AuthLayout from "@/pages/Auth/AuthLayout.vue";
+import DashbardLayout from "@/pages/dashboard/Layout.vue"
+import Dashboard from "@/pages/dashboard/Dashboard.vue";
 const routes = [
-  
-    {path:'/',name:'dashboard',component:Home},
-    {path:'/login',name:'ligin',component:Login},
-    {path:'/register',name:'register',component:Register},
+  {path:'/',
+    component: LayoutPage,
+    children:[
+      {path:'',component:Home},
+      
+
+
+    ]
+  },
+  {
+    path:'/login',
+    component:AuthLayout,
+    children:[
+      {path:'',component:Login}
+    ]
+  },
+        {
+    path:'/register',
+    component:AuthLayout,
+    children:[
+      {path:'',component:Register}
+    ]
+  },
+  {
+    path:'/dashboard',
+    component:DashbardLayout,
+    children:[
+      {path:'',component:Dashboard}
+    ]
+
+  }
+
+    
   ];
 
   
