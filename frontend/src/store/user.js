@@ -7,9 +7,9 @@ export const useUserStore = defineStore('user', {
   }),
 
   getters: {
-    userRole: (state) => state.user?.role || 'guest',
-    isAdmin: (state) => state.user?.role === 'admin',
-    isUser: (state) => state.user?.role === 'user',
+    userRole: (state) => state.user?.role || 'Attendee',
+    isAdmin: (state) => state.user?.role === 'Admin',
+    isUser: (state) => state.user?.role === 'Organizer',
     // isAuthenticated : (state) => !!state.user
   },
 
@@ -32,6 +32,17 @@ export const useUserStore = defineStore('user', {
         this.user = JSON.parse(savedUser)
         this.isAuthenticated = true
       }
+    },
+    actions: {
+  async fetchCurrentUser() {
+    try {
+      const response = await api.get('/user')
+      this.login(response.data) // update store
+    } catch (error) {
+      this.logout() // clear store if not authenticated
     }
+  }
+}
+
   }
 })

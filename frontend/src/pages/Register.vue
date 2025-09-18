@@ -125,6 +125,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import ImgSign from '@/components/ImgSign.vue'
 import InputField from '@/components/InputField.vue'
+import AuthService from '@/services'
 
 const router = useRouter()
 
@@ -143,7 +144,9 @@ const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
 }
 
+
 const handleRegister = async () => {
+  // Frontend validations
   if (!form.terms) {
     alert('You must accept the terms and conditions.')
     return
@@ -155,16 +158,31 @@ const handleRegister = async () => {
 
   isLoading.value = true
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    console.log('Register data:', form)
-    router.push('/login')
+    // Call API
+    const response = await AuthService.register({
+      name: form.name,
+      email: form.email,
+      password: form.password,
+      phone: '', // optional, add if needed
+    })
+
+    console.log('Registration success:', response.data)
+
+    // Optionally, auto-login after register
+    const user = response.data.user
+    const token = response.data.token
+    localStorage.setItem('api_token', token)
+
+    // Redirect to dashboard or login page
+    router.push('/')
   } catch (err) {
-    console.error('Registration error:', err)
+    console.error('Registration error:', err.response?.data || err)
+    alert(err.response?.data?.message || 'Registration failed')
   } finally {
     isLoading.value = false
   }
 }
+
 </script>
 
 <style scoped>

@@ -1,9 +1,8 @@
 <template>
   <div class="min-h-screen flex flex-col lg:flex-row rtl:flex-row-reverse">
     <!-- Left side - Background Image (Larger) -->
-    <div class="hidden lg:block lg:w-2/3">
       <ImgSign/>
-    </div>
+
 
     <!-- Right side - Login Form (Smaller) -->
     <div class="w-full lg:w-1/3 flex items-center justify-center p-8 bg-[#f7f9fd] dark:bg-[#1f2937]">
@@ -118,6 +117,8 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import ImgSign from '@/components/ImgSign.vue'
 import InputField from '@/components/InputField.vue'
+import AuthService from '@/services'
+import { useUserStore } from '@/store/user'
 
 const router = useRouter()
 
@@ -150,25 +151,37 @@ const loginWithLinkedIn = () => {
   // Add your LinkedIn OAuth implementation here
 }
 
+
+const userStore = useUserStore()
+
 const handleLogin = async () => {
   isLoading.value = true
-  
+
   try {
-    // Simulate API call
-    await new Promise(resolve => setTimeout(resolve, 2000))
-    
-    // Add your actual login logic here
-    console.log('Login attempt:', form)
-    
-    // Redirect to dashboard or home page
-    router.push('/')
+    const response = await AuthService.login({
+      email: form.email,
+      password: form.password,
+    })
+
+    const user = response.data.user
+    const token = response.data.token
+
+    // Save user in Pinia store
+    userStore.login(user)
+
+    // Save token in localStorage for API requests
+    localStorage.setItem('api_token', token)
+
+    // Redirect
+    router.push('/dashboard')
   } catch (error) {
-    console.error('Login error:', error)
-    alert('Login failed. Please try again.')
+    console.error('Login error:', error.response?.data || error)
+    alert(error.response?.data?.message || 'Login failed')
   } finally {
     isLoading.value = false
   }
 }
+
 </script>
 
 <style scoped>

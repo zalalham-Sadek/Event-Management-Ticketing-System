@@ -1,113 +1,74 @@
-import { createRouter,createWebHashHistory } from "vue-router";
+import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "@/pages/HomePage.vue";
 import Login from "@/pages/Login.vue";
 import Register from "@/pages/Register.vue";
 import LayoutPage from "@/pages/Layout.vue";
 import AuthLayout from "@/pages/Auth/AuthLayout.vue";
-import DashbardLayout from "@/pages/dashboard/Layout.vue"
+import DashbardLayout from "@/pages/dashboard/Layout.vue";
 import Dashboard from "@/pages/dashboard/Dashboard.vue";
+import Admin from "@/pages/Admin.vue";
+
 const routes = [
-  {path:'/',
+  {
+    path: "/",
     component: LayoutPage,
-    children:[
-      {path:'',component:Home},
-      
-
-
-    ]
+    children: [
+      { path: "", component: Home },
+    ],
   },
   {
-    path:'/login',
-    component:AuthLayout,
-    children:[
-      {path:'',component:Login}
-    ]
-  },
-        {
-    path:'/register',
-    component:AuthLayout,
-    children:[
-      {path:'',component:Register}
-    ]
+    path: "/login",
+    component: AuthLayout,
+    children: [{ path: "", component: Login }],
   },
   {
-    path:'/dashboard',
-    component:DashbardLayout,
-    children:[
-      {path:'',component:Dashboard}
-    ]
+    path: "/register",
+    component: AuthLayout,
+    children: [{ path: "", component: Register }],
+  },
+  {
+    path: "/admin",
+    component: AuthLayout,
+    children: [{ path: "", component: Admin }],
+  },
+  {
+    path: "/dashboard",
+    component: DashbardLayout,
+    children: [{ path: "", component: Dashboard }],
+    meta: { requiresAuth: true }, // ✅ شرط المصادقة
+  },
 
-  }
+  // ✅ أي مسار غير موجود يرجع للصفحة الرئيسية
+  {
+    path: "/:pathMatch(.*)*",
+    redirect: "/",
+  },
+];
 
-    
-  ];
-
-  
 const router = createRouter({
-    history:createWebHashHistory(),
-    routes
+  history: createWebHashHistory(),
+  routes,
 });
 
 // ✅ Navigation Guard
-// router.beforeEach(async (to, from, next) => {
-//   const isAuthenticated = localStorage.getItem('user') !== null
+// ✅ Navigation Guard
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem("api_token"); // خزّنه وقت تسجيل الدخول
+  const isAuthenticated = !!token;
 
-//   // Allow access to setup, login and register pages
-//   if (to.path === '/setup' || to.path === '/login' || to.path === '/register') {
-//     // For setup page, check if admin already exists
-//     if (to.path === '/setup') {
-//       try {
-//         const response = await services.AuthService.checkSetup()
-//         const data = response.data
-//         if (data.hasAdmin) {
-//           // If admin exists, redirect to login
-//           next({ path: '/login' })
-//           return
-//         }
-//       } catch (err) {
-//         console.error('Setup check error:', err)
-//         // If it's a 409 conflict, it means admin exists
-//         if (err.response && err.response.status === 409) {
-//           next({ path: '/login' })
-//           return
-//         }
-//         // If check fails, allow access to setup
-//       }
-//     }
-//     next()
-//   } else if (!isAuthenticated) {
-//     // Check if setup is needed before redirecting to login
-//     try {
-//       const response = await services.AuthService.checkSetup()
-//       console.log('Setup check response:', response.data)
-//       const data = response.data
-//       if (!data.hasAdmin) {
-//         // If no admin exists, redirect to setup
-//         console.log('No admin found, redirecting to setup')
-//         next({ path: '/setup' })
-//         return
-//       } else {
-//         console.log('Admin exists, redirecting to login')
-//       }
-//     } catch (err) {
-//       console.error('Setup check error:', err)
-//       // If it's a 409 conflict, it means admin exists
-//       if (err.response && err.response.status === 409) {
-//         console.log('409 conflict - admin exists, redirecting to login')
-//         // Admin exists, continue to login redirect
-//       } else {
-//         // If check fails, assume no admin and redirect to setup
-//         console.log('Check failed, assuming no admin, redirecting to setup')
-//         next({ path: '/setup' })
-//         return
-//       }
-//     }
-//     // Only redirect to login if admin exists and user is not authenticated
-//     next({ path: '/login' })
-//   } else {
-//     next()
-//   }
-// })
+  // لو المستخدم Authenticated وحاول يروح للـ login أو register → رجعه للـ dashboard
+  if (isAuthenticated && (to.path === "/login" || to.path === "/register")) {
+    next({ path: "/dashboard" });
+  }
+  // لو الصفحة تتطلب Auth والمستخدم مش مسجل → رجعه للـ login
+  else if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
+    next({ path: "/login" });
+  }
+  // غير كذا → كمل عادي
+  else {
+    next();
+  }
+});
 
 
 export default router;
