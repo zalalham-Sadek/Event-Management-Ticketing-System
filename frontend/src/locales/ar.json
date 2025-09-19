@@ -1,17 +1,16 @@
 {
-
-    "home": "الرئيسية",
-    "events": "الفعاليات",
-    "contact": "اتصال",
-    "login": "تسجيل الدخول",
-    "organizers": "المنظمين",
+  "home": "الرئيسية",
+  "events": "الفعاليات",
+  "contact": "اتصال",
+  "login": "تسجيل الدخول",
+  "organizers": "المنظمين",
   "Locate and celebrate upcoming events.": "اكتشف واحتفل بالأحداث القادمة.",
   "Discover Events": "اكتشف الفعاليات",
   "Music Concerts": "حفلات موسيقية",
   "Explore By Cities": "استكشف حسب المدن",
   "Popular Location": "المواقع الشائعة",
   "Featured Events": "الفعاليات المميزة",
-  "Featured" : "مميز",
+  "Featured": "مميز",
   "how it works": "كيف تعمل",
   "starting soon": "يبدأ قريبا",
   "Starting Soon Events": "الفعاليات التي تبدأ قريبا",
@@ -55,5 +54,48 @@
   "Username": "اسم المستخدم",
   "Confirm Password": "تأكيد كلمة المرور",
   "Already have an account?": "هل لديك حساب؟",
-  "Sign in here": "تسجيل الدخول هنا"
+  "Sign in here": "تسجيل الدخول هنا",
+  "users": {
+    "part": "المستخدمون",
+    "titleSingular": "مستخدم",
+    "overview": { "title": "نظرة عامة" },
+    "add": {
+      "title": "إضافة مستخدم",
+      "button": "إضافة مستخدم",
+      "passwordPlaceholder": "ادخل كلمة المرور",
+      "saveButton": "حفظ المستخدم",
+      "success": "تم إنشاء المستخدم بنجاح",
+      "failed": "فشل إنشاء المستخدم. الرجاء المحاولة مرة أخرى.",
+      "saved": "تم حفظ المستخدم بنجاح"
+    },
+    "edit": {
+      "title": "تعديل المستخدم",
+      "updateButton": "تحديث المستخدم",
+      "success": "تم تحديث المستخدم بنجاح",
+      "failed": "فشل تحديث المستخدم. الرجاء المحاولة مرة أخرى.",
+      "loadFailed": "فشل تحميل بيانات المستخدم"
+    },
+    "form": {
+      "fullName": "ادخل الاسم الكامل",
+      "email": "ادخل البريد الإلكتروني",
+      "selectRole": "اختر الدور",
+      "newPasswordOptional": "ادخل كلمة مرور جديدة (اختياري)"
+    },
+    "loading": "جاري تحميل المستخدمين..."
+  },
+  "roles": {
+    "Attendee": "حاضر",
+    "Admin": "مسؤول",
+    "Organizer": "منظم"
+  },
+  "validation": {
+    "nameRequired": "الاسم مطلوب",
+    "emailRequired": "البريد الإلكتروني مطلوب",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "roleRequired": "الدور مطلوب",
+    "fillRequired": "يرجى ملء جميع الحقول المطلوبة"
+  },
+  "common": {
+    "filters": "فلاتر"
+  }
 }

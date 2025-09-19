@@ -13,7 +13,7 @@
 
       <tbody>
         <tr
-          v-for="(event, index) in paginatedEvents"
+          v-for="(item, index) in paginatedEvents"
           :key="index"
           class="border-b border-primary-border hover:bg-background-primary/30"
         >
@@ -40,21 +40,21 @@
                     <a
                       href="#"
                       class="block px-4 py-2 hover:bg-background-primary/30"
-                      @click.prevent="editEvent(event)"
+                      @click.prevent="editItem(item)"
                     >
                       <i class="fas fa-edit pr-3 text-xs"></i>Edit
                     </a>
                     <a
                       href="#"
                       class="block px-4 py-2 hover:bg-background-primary/30"
-                      @click.prevent="deleteEvent(event)"
+                      @click.prevent="deleteItem(item)"
                     >
                       <i class="fas fa-trash pr-3 text-xs"></i>Delete
                     </a>
                     <a
                       href="#"
                       class="block px-4 py-2 hover:bg-background-primary/30"
-                      @click.prevent="handleView(event)"
+                      @click.prevent="handleView(item)"
                     >
                       <i class="fas fa-eye pr-3 text-xs"></i>View
                     </a>
@@ -63,14 +63,14 @@
               </div>
             </template>
             <template v-else>
-              {{ event[col.toLowerCase()] }}
+              {{ item[col.toLowerCase()] }}
             </template>
           </td>
         </tr>
       </tbody>
     </table>
 
-    <!-- مودال التفاصيل -->
+    <!-- Modal -->
     <EventDetailModal
       v-if="viewMode === 'modal'"
       :title="title"
@@ -85,22 +85,31 @@
 </template>
 
 <script>
-import EventDetailModal from "./Modal.vue";
-import services from "@/services";
+import EventDetailModal from '@/components/dashboard/ui/Modal.vue'
+import ToastMessage from '@/components/ToastMessage.vue'
 
 export default {
+  components: {
+    EventDetailModal,
+    ToastMessage,
+  },
   props: {
     colTitle: Array,
     paginatedEvents: Array,
     title: String,
+    service: Object, // ✅ Pass the service dynamically (EventService, UserService, etc.)
+    deleteMethod: {
+      type: String,
+      default: "delete", // default method to call
+    },
+    baseRoute: {
+      type: String,
+      default: "events", // fallback
+    },
     viewMode: {
       type: String,
-      default: "modal" // modal | page
-    }
-  },
-  components: {
-    EventDetailModal,
-    ToastMessage
+      default: "modal",
+    },
   },
   data() {
     return {
@@ -110,7 +119,7 @@ export default {
       toastMessage: "",
       toastVisible: false,
       toastType: "success",
-      allEvents: JSON.parse(localStorage.getItem("events")) || []
+      allEvents: JSON.parse(localStorage.getItem("events")) || [],
     };
   },
   mounted() {
@@ -129,30 +138,32 @@ export default {
         this.openDropdown = null;
       }
     },
-    editEvent(event) {
-      alert("Edition feature coming soon!");
+    editItem(item) {
+      this.$router.push(`/${this.baseRoute}/edit/${item.id}`);
     },
-    async deleteEvent(event) {
+    async deleteItem(item) {
+      if (!this.service || !this.service[this.deleteMethod]) {
+        console.error("Service or delete method not provided!");
+        return;
+      }
       try {
-        await services.EventService.delete(event.id);
-        this.showToast("Event deleted successfully", "success");
-        setTimeout(() => {
-          this.$emit("refreshData");
-        }, 1500);
+        await this.service[this.deleteMethod](item.id);
+        this.showToast("Deleted successfully", "success");
+        setTimeout(() => this.$emit("refreshData"), 1500);
       } catch (err) {
         console.error("Delete error:", err);
         this.showToast("Failed to delete. Please try again.", "error");
       }
     },
-    handleView(event) {
+    handleView(item) {
       if (this.viewMode === "page") {
-        this.$router.push(`/events/${event.id}`);
+        this.$router.push(`/${this.baseRoute}/${item.id}`);
       } else {
-        this.viewEvent(event);
+        this.viewItem(item);
       }
     },
-    viewEvent(event) {
-      this.selectedEvent = event;
+    viewItem(item) {
+      this.selectedEvent = item;
       this.showModal = true;
     },
     closeModal() {
@@ -163,10 +174,8 @@ export default {
       this.toastMessage = message;
       this.toastType = type;
       this.toastVisible = true;
-      setTimeout(() => {
-        this.toastVisible = false;
-      }, duration);
-    }
-  }
+      setTimeout(() => (this.toastVisible = false), duration);
+    },
+  },
 };
 </script>

@@ -7,6 +7,9 @@ import AuthLayout from "@/pages/Auth/AuthLayout.vue";
 import DashbardLayout from "@/pages/dashboard/Layout.vue";
 import Dashboard from "@/pages/dashboard/Dashboard.vue";
 import Admin from "@/pages/Admin.vue";
+import Users from "@/pages/dashboard/users/Users.vue";
+import AddUser from "@/pages/dashboard/users/AddUser.vue";
+import EditUser from "@/pages/dashboard/users/EditUser.vue";
 
 const routes = [
   {
@@ -34,7 +37,13 @@ const routes = [
   {
     path: "/dashboard",
     component: DashbardLayout,
-    children: [{ path: "", component: Dashboard }],
+    children:
+    [
+      { path: "", component: Dashboard },
+      {path:"/users",component: Users},
+      {path:"/users/create",component: AddUser},
+      {path:"/users/edit/:id",component: EditUser},
+    ],
     meta: { requiresAuth: true }, // ✅ شرط المصادقة
   },
 

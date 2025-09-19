@@ -1,5 +1,4 @@
 {
-
   "home": "Home",
   "events": "Events",
   "contact": "Contact",
@@ -11,7 +10,7 @@
   "Explore By Cities": "Explore By Cities",
   "Popular Location": "Popular Location",
   "Featured Events": "Featured Events",
-  "Featured" : "Featured",
+  "Featured": "Featured",
   "how it works": "HOW IT WORKS",
   "starting soon": "Starting Soon",
   "Starting Soon Events": "Starting Soon Events",
@@ -55,5 +54,48 @@
   "Username": "Username",
   "Confirm Password": "Confirm Password",
   "Already have an account?": "Already have an account?",
-  "Sign in here": "Sign in here"
+  "Sign in here": "Sign in here",
+  "users": {
+    "part": "Users",
+    "titleSingular": "User",
+    "overview": { "title": "overview" },
+    "add": {
+      "title": "Add User",
+      "button": "Add User",
+      "passwordPlaceholder": "Enter Password",
+      "saveButton": "Save User",
+      "success": "User created successfully",
+      "failed": "Failed to create user. Please try again.",
+      "saved": "User saved successfully"
+    },
+    "edit": {
+      "title": "Edit User",
+      "updateButton": "Update User",
+      "success": "User updated successfully",
+      "failed": "Failed to update user. Please try again.",
+      "loadFailed": "Failed to load user data"
+    },
+    "form": {
+      "fullName": "Enter Full Name",
+      "email": "Enter Email",
+      "selectRole": "Select Role",
+      "newPasswordOptional": "Enter New Password (optional)"
+    },
+    "loading": "Loading users..."
+  },
+  "roles": {
+    "Attendee": "Attendee",
+    "Admin": "Admin",
+    "Organizer": "Organizer"
+  },
+  "validation": {
+    "nameRequired": "Name is required",
+    "emailRequired": "Email is required",
+    "passwordRequired": "Password is required",
+    "roleRequired": "Role is required",
+    "fillRequired": "Please fill all required fields"
+  },
+  "common": {
+    "filters": "Filters"
+  }
 }

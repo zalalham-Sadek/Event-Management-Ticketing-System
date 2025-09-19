@@ -125,7 +125,7 @@ import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import ImgSign from '@/components/ImgSign.vue'
 import InputField from '@/components/InputField.vue'
-import AuthService from '@/services'
+import AuthService from '@/services/AuthService'
 
 const router = useRouter()
 
