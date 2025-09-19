@@ -3,8 +3,8 @@
     <div class="max-w-6xl mx-auto">
       <!-- Header -->
       <SectionHeader
-        title="Featured Events"
-        subtitle="FEATURED"
+        title="Tickets"
+        subtitle="AVAILABLE TICKETS"
         @prev="swiper.slidePrev()"
         @next="swiper.slideNext()"
       />
@@ -43,84 +43,112 @@
       <!-- Cards Grid -->
       <div class="flex flex-wrap justify-center gap-6">
         <Card
-          v-for="(card, i) in filteredCards"
+          v-for="(ticket, i) in paginatedTickets"
           :key="i"
           class="w-full sm:w-[calc(50%-1.5rem)] md:w-[calc(33.333%-1.5rem)] lg:w-[calc(25%-1.5rem)]"
-          :event="card"
+          :event="{
+            title: ticket.event.title,
+            category: ticket.event.type,
+            image: ticket.event.poster ? `http://127.0.0.1:8000/storage/${ticket.event.poster}` : 'https://picsum.photos/400/250',
+            date: ticket.event.date,
+            location: ticket.event.location,
+            price: `$${ticket.price}`,
+            organizer: ticket.event.user.name,
+            organizerLogo: ticket.event.user.avatar || 'https://picsum.photos/id/1005/100/100',
+          }"
         />
+      </div>
+
+      <!-- Pagination -->
+      <div v-if="totalPages > 1" class="flex justify-center mt-6 space-x-2">
+        <button
+          @click="prevPage"
+          :disabled="currentPage === 1"
+          class="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50"
+        >
+          Prev
+        </button>
+        <span class="px-3 py-1">{{ currentPage }} / {{ totalPages }}</span>
+        <button
+          @click="nextPage"
+          :disabled="currentPage === totalPages"
+          class="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded disabled:opacity-50"
+        >
+          Next
+        </button>
       </div>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
+import { ref, computed, onMounted, watch } from "vue"
 import { Swiper, SwiperSlide } from "swiper/vue"
 import { Navigation } from "swiper/modules"
 import "swiper/css"
 import SectionHeader from "./SectionHeader.vue"
 import Card from "./Card.vue"
+import services from "@/services"
 
 const swiper = ref(null)
-const onSwiper = (s) => {
-  swiper.value = s
-}
+const onSwiper = (s) => { swiper.value = s }
 
-const filters = ["All", "Music", "Sports", "Art", "Tech", "Food", "Business"]
+const filters = ["All", "VIP", "Regular", "Early Bird"]
 const activeFilter = ref("All")
 
-// Example cards with categories
-const cards = ref([
-  {
-    title: "Big Apple Sports Extravaganza",
-    category: "Sports",
-    image: "https://picsum.photos/id/1011/400/250",
-    date: "30 Sep, 2025 - 02 Oct, 2025",
-    location: "New York",
-    price: "$20.00",
-    organizer: "Green and Gonzales Trading",
-    organizerLogo: "https://picsum.photos/id/1005/100/100"
-  },
-  {
-    title: "Jazz Night in the City",
-    category: "Music",
-    image: "https://picsum.photos/id/1025/400/250",
-    date: "15 Oct, 2025",
-    location: "Los Angeles",
-    price: "$35.00",
-    organizer: "LA Music Events",
-    organizerLogo: "https://picsum.photos/id/1016/100/100"
-  },
-  {
-    title: "Tech Expo 2025",
-    category: "Tech",
-    image: "https://picsum.photos/id/1035/400/250",
-    date: "05 Nov, 2025",
-    location: "San Francisco",
-    price: "$50.00",
-    organizer: "Innovators Inc.",
-    organizerLogo: "https://picsum.photos/id/1018/100/100"
-  },
-  {
-    title: "Art Festival Downtown",
-    category: "Art",
-    image: "https://picsum.photos/id/1045/400/250",
-    date: "20 Dec, 2025",
-    location: "Chicago",
-    price: "$15.00",
-    organizer: "Creative Minds",
-    organizerLogo: "https://picsum.photos/id/1020/100/100"
-  },
-])
+// Tickets state
+const tickets = ref([])
+const loading = ref(false)
+const error = ref('')
 
-// Computed property to filter cards
-const filteredCards = computed(() => {
-  if (activeFilter.value === "All") return cards.value
-  return cards.value.filter((c) => c.category === activeFilter.value)
+// Pagination
+const currentPage = ref(1)
+const itemsPerPage = 8
+
+// Fetch tickets from API
+const loadTickets = async () => {
+  loading.value = true
+  error.value = ''
+  try {
+    const response = await services.TicketService.getAllTickets() // API should return ticket -> event -> user
+    tickets.value = response.data.data
+  } catch (err) {
+    console.error('Error loading tickets:', err)
+    error.value = 'Failed to load tickets.'
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  loadTickets()
 })
+
+// Filtered tickets
+const filteredTickets = computed(() => {
+  if (activeFilter.value === "All") return tickets.value
+  return tickets.value.filter(ticket => ticket.type === activeFilter.value)
+})
+
+// Pagination logic
+const totalPages = computed(() => Math.ceil(filteredTickets.value.length / itemsPerPage))
+
+const paginatedTickets = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage
+  return filteredTickets.value.slice(start, start + itemsPerPage)
+})
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--
+}
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++
+}
+
+watch([activeFilter, tickets], () => { currentPage.value = 1 })
 
 const setFilter = (filter) => {
   activeFilter.value = filter
-  console.log("Filter changed to:", filter)
 }
 </script>
