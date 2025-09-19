@@ -16,6 +16,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useUserStore } from '@/store/user'
+import Btn from '@/components/dashboard/ui/Btn.vue'
 
 const props = defineProps({
   part: String,
@@ -34,5 +35,9 @@ const props = defineProps({
   },
 })
 const userStore = useUserStore()
-const showButton = computed(() => props.enableBtn && userStore.isAuthenticated && userStore.userRole=='admin')
+console.log('Role from store:', userStore.userRole)
+
+const showButton = computed(() => 
+  props.enableBtn && userStore.isAuthenticated && userStore.userRole.toLowerCase() === 'admin'
+)
 </script>

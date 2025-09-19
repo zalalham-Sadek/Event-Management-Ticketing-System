@@ -6,5 +6,6 @@ import SpeakerService from './SpeakerService';
 export default{
   api,
   AuthService,
+  UserService,
 
 };
