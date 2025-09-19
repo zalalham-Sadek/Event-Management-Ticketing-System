@@ -1,7 +1,7 @@
 <template>
   <ToastMessage :message="toastMessage" :visible="toastVisible" :type="toastType" />
 
-  <div class="p-6 max-w-4xl mx-auto">
+  <div class="p-6 max-w-7xl mx-auto">
     <headPage :part="$t('users.part')" :title="$t('users.add.title')" :enableBtn="false" href="" />
     <div class="col-span-12 md:col-span-6">
       <div

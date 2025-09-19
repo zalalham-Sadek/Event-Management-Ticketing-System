@@ -48,6 +48,7 @@ import BaseBarChart from '@/components/dashboard/ui/BarChart.vue'
 import BaseDoughnutChart from '@/components/dashboard/ui/BaseDoughnutChart.vue'
 import CardAnalytic from '@/components/dashboard/ui/CardAnalytic.vue'
 import WellcomeCard from '@/components/dashboard/ui/WellcomeCard.vue'
+import service from '@/services'
 
 // 📦 State
 const events = ref([])
@@ -63,12 +64,10 @@ const userName = computed(() => userStore.user?.name || 'Admin')
 // Fetch API data
 const fetchData = async () => {
   try {
-    const [eventsRes, speakersRes] = await Promise.all([
+    const [eventsRes] = await Promise.all([
       service.EventService.getAllEvents(),
-      service.SpeakerService.getAllSpeakers()
     ])
     events.value = eventsRes.data.events
-    speakers.value = speakersRes.data.speakers
   } catch (err) {
     toastMessage.value = 'Failed to load data from API'
     toastType.value = 'error'
