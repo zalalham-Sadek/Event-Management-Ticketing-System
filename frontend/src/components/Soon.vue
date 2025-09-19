@@ -2,31 +2,38 @@
   <section class="py-12 my-5 px-6 bg-[#f7f9fd] dark:bg-[#1f2937]">
     <div class="max-w-6xl mx-auto">
       <!-- Header -->
-        <div class="flex items-center justify-between mb-6">
-    <div class="space-y-3 my-3">
-      <span
-        class="text-sm px-5 py-1 text-[var(--color-primary)] font-semibold uppercase bg-[#e1e5ec] dark:bg-[#172231]"
-      >
-        {{ $t("starting soon") }}
-      </span>
-      <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-3">
-        {{ $t("Starting Soon Events" ) }}
-      </h2>
-    </div>
-
-    <!-- Navigation buttons -->
-    
-  </div>
-
-
+      <div class="flex items-center justify-between mb-6">
+        <div class="space-y-3 my-3">
+          <span class="text-sm px-5 py-1 text-[var(--color-primary)] font-semibold uppercase bg-[#e1e5ec] dark:bg-[#172231]">
+            {{ $t("upcoming") }}
+          </span>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-white mt-3">
+            {{ $t("Events in the Next 2 Weeks") }}
+          </h2>
+        </div>
+      </div>
 
       <!-- Cards Grid -->
-      <div class="flex flex-wrap justify-center gap-6">
+      <div v-if="loading" class="flex justify-center items-center py-8">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+        <span class="ml-2 text-gray-600">{{ $t('tickets.loading') }}</span>
+      </div>
+      <div v-else-if="error" class="p-4 bg-red-100 text-red-700 rounded mb-4">{{ error }}</div>
+      <div v-else class="flex flex-wrap justify-center gap-6">
         <Card
-          v-for="(card, i) in filteredCards"
+          v-for="(ticket, i) in filteredTickets"
           :key="i"
           class="w-full sm:w-[calc(50%-1.5rem)] md:w-[calc(33.333%-1.5rem)] lg:w-[calc(25%-1.5rem)]"
-          :event="card"
+          :event="{
+            title: ticket.event.title,
+            category: ticket.event.type,
+            image: ticket.event.poster ? `http://127.0.0.1:8000/storage/${ticket.event.poster}` : 'https://picsum.photos/400/250',
+            date: ticket.event.date,
+            location: ticket.event.location,
+            price: `$${ticket.price}`,
+            organizer: ticket.event.user.name,
+            organizerLogo: ticket.event.user.avatar || 'https://picsum.photos/id/1005/100/100',
+          }"
         />
       </div>
     </div>
@@ -34,73 +41,56 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue"
-import { Swiper, SwiperSlide } from "swiper/vue"
-import { Navigation } from "swiper/modules"
-import "swiper/css"
-import SectionHeader from "./SectionHeader.vue"
-import Card from "./Card.vue"
+import { ref, computed, onMounted } from "vue"
+import Card from "@/components/Card.vue"
+import services from "@/services"
 
-const swiper = ref(null)
-const onSwiper = (s) => {
-  swiper.value = s
+const tickets = ref([])
+const loading = ref(false)
+const error = ref('')
+
+// Fetch tickets from API
+const loadTickets = async () => {
+  loading.value = true
+  error.value = ''
+  try {
+    const response = await services.TicketService.getAllTickets() // Make sure this returns ticket -> event -> user
+    tickets.value = response.data.data
+  } catch (err) {
+    console.error('Error loading tickets:', err)
+    error.value = 'Failed to load tickets.'
+  } finally {
+    loading.value = false
+  }
 }
 
-const filters = ["All", "Music", "Sports", "Art", "Tech", "Food", "Business"]
-const activeFilter = ref("All")
-
-// Example cards with categories
-const cards = ref([
-  {
-    title: "Big Apple Sports Extravaganza",
-    category: "Sports",
-    image: "https://picsum.photos/id/1011/400/250",
-    date: "30 Sep, 2025 - 02 Oct, 2025",
-    location: "New York",
-    price: "$20.00",
-    organizer: "Green and Gonzales Trading",
-    organizerLogo: "https://picsum.photos/id/1005/100/100"
-  },
-  {
-    title: "Jazz Night in the City",
-    category: "Music",
-    image: "https://picsum.photos/id/1025/400/250",
-    date: "15 Oct, 2025",
-    location: "Los Angeles",
-    price: "$35.00",
-    organizer: "LA Music Events",
-    organizerLogo: "https://picsum.photos/id/1016/100/100"
-  },
-  {
-    title: "Tech Expo 2025",
-    category: "Tech",
-    image: "https://picsum.photos/id/1035/400/250",
-    date: "05 Nov, 2025",
-    location: "San Francisco",
-    price: "$50.00",
-    organizer: "Innovators Inc.",
-    organizerLogo: "https://picsum.photos/id/1018/100/100"
-  },
-  {
-    title: "Art Festival Downtown",
-    category: "Art",
-    image: "https://picsum.photos/id/1045/400/250",
-    date: "20 Dec, 2025",
-    location: "Chicago",
-    price: "$15.00",
-    organizer: "Creative Minds",
-    organizerLogo: "https://picsum.photos/id/1020/100/100"
-  },
-])
-
-// Computed property to filter cards
-const filteredCards = computed(() => {
-  if (activeFilter.value === "All") return cards.value
-  return cards.value.filter((c) => c.category === activeFilter.value)
+onMounted(() => {
+  loadTickets()
 })
 
-const setFilter = (filter) => {
-  activeFilter.value = filter
-  console.log("Filter changed to:", filter)
-}
+// Computed: filter tickets for events in the next 2 weeks and one ticket per event
+const filteredTickets = computed(() => {
+  const now = new Date()
+  const twoWeeksLater = new Date()
+  twoWeeksLater.setDate(now.getDate() + 14) // 14 days ahead
+
+  // Filter tickets in the next 2 weeks
+  const upcomingTickets = tickets.value.filter(ticket => {
+    const eventDate = new Date(ticket.event.date)
+    return eventDate >= now && eventDate <= twoWeeksLater
+  })
+
+  // Pick only one ticket per event
+  const oneTicketPerEvent = []
+  const seenEventIds = new Set()
+  for (const ticket of upcomingTickets) {
+    if (!seenEventIds.has(ticket.event.id)) {
+      oneTicketPerEvent.push(ticket)
+      seenEventIds.add(ticket.event.id)
+    }
+  }
+
+  // Sort by event date ascending
+  return oneTicketPerEvent.sort((a, b) => new Date(a.event.date) - new Date(b.event.date))
+})
 </script>

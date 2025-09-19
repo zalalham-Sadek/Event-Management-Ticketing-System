@@ -14,17 +14,14 @@ class TicketController extends Controller
      */
     public function indexAll()
     {
-        if(!Gate::allows('all_tickets')){
-            return response()->json(['success' => false, 'message' => 'Unauthorized'], 403);
-        }
-
-        $tickets = Ticket::all();
+        $tickets = Ticket::with('event.user')->get();
 
         return response()->json([
-            'message' => 'All tickets fetched successfully',
+            'message' => 'All tickets with events and organizers fetched successfully',
             'data' => $tickets
-        ],200);
+        ], 200);
     }
+
 
     public function index($eventId)
     {
