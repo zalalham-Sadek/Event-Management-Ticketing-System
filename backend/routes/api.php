@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\UserController;
 use App\Http\Controllers\Api\EventController;
+use App\Http\Controllers\Api\TicketController;
+
 Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
@@ -21,4 +23,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('users', UserController::class);
     Route::apiResource('events',EventController::class);
     Route::get('/event-types', [EventController::class, 'getEventTypes']);// new
+
+    Route::get('/tickets', [TicketController::class, 'indexAll']); // new
+Route::prefix('events/{eventId}')->group(function () {
+    Route::get('tickets', [TicketController::class, 'index']);
+    Route::post('tickets', [TicketController::class, 'store']);
+    Route::get('tickets/{ticketId}', [TicketController::class, 'show']);
+    Route::put('tickets/{ticketId}', [TicketController::class, 'update']);
+    Route::delete('tickets/{ticketId}', [TicketController::class, 'destroy']);
+});
+
 });

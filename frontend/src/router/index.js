@@ -14,6 +14,9 @@ import Events from "@/pages/dashboard/events/Events.vue";
 import AddEvent from "@/pages/dashboard/events/AddEvent.vue";
 import EventDetails from "@/pages/dashboard/events/EventDetails.vue";
 import EditEvent from "@/pages/dashboard/events/EditEvent.vue";
+import Tickets from "@/pages/dashboard/tickets/Tickets.vue";
+import AddTicket from "@/pages/dashboard/tickets/AddTicket.vue";
+import EditTicket from "@/pages/dashboard/tickets/EditTicket.vue";
 
 const routes = [
   {
@@ -51,6 +54,9 @@ const routes = [
       {path:"/events/:id",component:EventDetails},
       {path:"/events/create",component: AddEvent},
       {path:"/events/edit/:id",component: EditEvent},
+      {path:"/events/tickets",component: Tickets},
+      {path:"/events/:eventId/tickets/create",component: AddTicket},
+      {path:"/events/:eventId/tickets/edit/:ticketId",component: EditTicket},
     ],
     meta: { requiresAuth: true }, // ✅ شرط المصادقة
   },
