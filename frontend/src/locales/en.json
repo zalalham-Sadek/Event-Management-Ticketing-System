@@ -97,5 +97,45 @@
   },
   "common": {
     "filters": "Filters"
+  },
+  "tickets": {
+    "title": "Tickets",
+    "add": "Add Ticket",
+    "edit": "Edit Ticket",
+    "delete": "Delete Ticket",
+    "confirmDelete": "Are you sure you want to delete this ticket?",
+    "yes": "Yes",
+    "no": "No",
+    "form": {
+      "name": "Ticket Name",
+      "price": "Price",
+      "quantity": "Quantity",
+      "type": "Ticket Type",
+      "startDate": "Sales Start Date",
+      "endDate": "Sales End Date",
+      "selectType": "Select Ticket Type"
+    },
+    "types": {
+      "Regular": "Regular",
+      "VIP": "VIP",
+      "Early Bird": "Early Bird"
+    },
+    "placeholders": {
+      "name": "Enter ticket name",
+      "price": "Enter price (e.g., 50.00)",
+      "quantity": "Enter quantity"
+    },
+    "messages": {
+      "created": "Ticket created successfully",
+      "updated": "Ticket updated successfully",
+      "deleted": "Ticket deleted successfully",
+      "loadFailed": "Failed to load tickets. Please try again.",
+      "createFailed": "Failed to create ticket. Please try again.",
+      "updateFailed": "Failed to update ticket. Please try again.",
+      "deleteFailed": "Failed to delete ticket. Please try again."
+    },
+    "loading": {
+      "tickets": "Loading tickets..."
+    }
   }
 }
