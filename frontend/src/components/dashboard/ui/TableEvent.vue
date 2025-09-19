@@ -20,10 +20,11 @@
           <td class="px-4 py-4 sm:px-6">#</td>
 
           <td
-            v-for="(col, colIndex) in colTitle"
-            :key="colIndex"
-            class="px-4 py-4 sm:px-6 whitespace-nowrap dark:text-secondary-text"
-          >
+  v-for="(col, colIndex) in colTitle"
+  :key="colIndex"
+  class="px-4 py-4 sm:px-6 text-sm dark:text-secondary-text break-words whitespace-normal max-w-xs"
+>
+
             <template v-if="col.toLowerCase() === 'action'">
               <div class="relative inline-block text-left">
                 <button
@@ -63,8 +64,20 @@
               </div>
             </template>
             <template v-else>
-              {{ item[col.toLowerCase()] }}
-            </template>
+  <!-- Check if the column is 'poster' -->
+  <template v-if="col.toLowerCase() === 'poster'">
+    <img
+      :src="'http://127.0.0.1:8000/storage/'+item[col.toLowerCase()]"
+      alt="Poster"
+      class="w-16 h-16 object-cover rounded-md"
+    />
+  </template>
+  <template v-else>
+    {{ item[col.toLowerCase()] }}
+  </template>
+</template>
+
+            
           </td>
         </tr>
       </tbody>
@@ -142,6 +155,7 @@ export default {
       this.$router.push(`/${this.baseRoute}/edit/${item.id}`);
     },
     async deleteItem(item) {
+      console.log("Attempting to delete item:", this.service, this.deleteMethod, item);
       if (!this.service || !this.service[this.deleteMethod]) {
         console.error("Service or delete method not provided!");
         return;

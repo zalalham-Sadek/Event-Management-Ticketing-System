@@ -10,6 +10,10 @@ import Admin from "@/pages/Admin.vue";
 import Users from "@/pages/dashboard/users/Users.vue";
 import AddUser from "@/pages/dashboard/users/AddUser.vue";
 import EditUser from "@/pages/dashboard/users/EditUser.vue";
+import Events from "@/pages/dashboard/events/Events.vue";
+import AddEvent from "@/pages/dashboard/events/AddEvent.vue";
+import EventDetails from "@/pages/dashboard/events/EventDetails.vue";
+import EditEvent from "@/pages/dashboard/events/EditEvent.vue";
 
 const routes = [
   {
@@ -43,6 +47,10 @@ const routes = [
       {path:"/users",component: Users},
       {path:"/users/create",component: AddUser},
       {path:"/users/edit/:id",component: EditUser},
+      {path:"/events",component:Events},
+      {path:"/events/:id",component:EventDetails},
+      {path:"/events/create",component: AddEvent},
+      {path:"/events/edit/:id",component: EditEvent},
     ],
     meta: { requiresAuth: true }, // ✅ شرط المصادقة
   },
