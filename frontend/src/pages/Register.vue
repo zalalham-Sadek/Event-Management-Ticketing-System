@@ -126,7 +126,7 @@ import { useRouter } from 'vue-router'
 import ImgSign from '@/components/ImgSign.vue'
 import InputField from '@/components/InputField.vue'
 import AuthService from '@/services/AuthService'
-
+import { useUserStore } from '@/store/user'
 const router = useRouter()
 
 const form = reactive({
@@ -144,6 +144,7 @@ const togglePasswordVisibility = () => {
   showPassword.value = !showPassword.value
 }
 
+const userStore = useUserStore()
 
 const handleRegister = async () => {
   // Frontend validations
@@ -166,15 +167,23 @@ const handleRegister = async () => {
       phone: '', // optional, add if needed
     })
 
-    console.log('Registration success:', response.data)
-
+    // console.log('Registration success:', response.data)
     // Optionally, auto-login after register
     const user = response.data.user
     const token = response.data.token
+    userStore.login(user)
+
     localStorage.setItem('api_token', token)
 
     // Redirect to dashboard or login page
-    router.push('/')
+    if (user.role === "Admin" || user.role === "Organizer") {
+      router.push("/dashboard")
+    } else if (user.role === "Attendee") {
+      router.push("/profile")
+    } else {
+      // fallback route if role not matched
+      router.push("/")
+    }
   } catch (err) {
     console.error('Registration error:', err.response?.data || err)
     alert(err.response?.data?.message || 'Registration failed')

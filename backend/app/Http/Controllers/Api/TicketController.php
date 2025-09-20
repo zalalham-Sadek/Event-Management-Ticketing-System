@@ -27,11 +27,11 @@ class TicketController extends Controller
     {
         $event = Event::findOrFail($eventId);
 
-        if (Gate::denies('viewAny', Ticket::class)) {
-            return response()->json([
-                'message' => 'Unauthorized'
-            ], 403);
-        }
+        // if (Gate::denies('viewAny', Ticket::class)) {
+        //     return response()->json([
+        //         'message' => 'Unauthorized'
+        //     ], 403);
+        // }
 
         $tickets = Ticket::where('event_id', $eventId)->get();
 

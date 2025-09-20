@@ -19,6 +19,7 @@ import AddTicket from "@/pages/dashboard/tickets/AddTicket.vue";
 import EditTicket from "@/pages/dashboard/tickets/EditTicket.vue";
 import TicketBooking from "@/pages/TicketBooking.vue";
 import PaymentPage from "@/pages/PaymentPage.vue";
+import ProfilePage from "@/pages/ProfilePage.vue";
 
 const routes = [
   {
@@ -33,6 +34,10 @@ const routes = [
   {
     path: "/events/:eventId/payment",
     component: PaymentPage,
+  },
+  {
+    path: "/profile",
+    component: ProfilePage,
   },
     ],
   },
@@ -89,11 +94,29 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem("api_token"); // خزّنه وقت تسجيل الدخول
   const isAuthenticated = !!token;
-
+  const userData = localStorage.getItem("user");
+  const user = JSON.parse(userData);
   // لو المستخدم Authenticated وحاول يروح للـ login أو register → رجعه للـ dashboard
-  if (isAuthenticated && (to.path === "/login" || to.path === "/register")) {
-    next({ path: "/dashboard" });
+  
+if (isAuthenticated) {
+  if (user?.role === "Admin" || user?.role === "Organizer") {
+    // Admin or Organizer
+    if (to.path === "/login" || to.path === "/register" || to.path === "/profile") {
+      next({ path: "/dashboard" });
+    } else {
+      next();
+    }
+  } else if (user?.role === "Attendee") {
+    // Attendee
+    if (to.path === "/login" || to.path === "/register" || to.path === "/dashboard") {
+      next({ path: "/profile" });
+    } else {
+      next();
+    }
+  } else {
+    next(); // unknown role
   }
+} 
   // لو الصفحة تتطلب Auth والمستخدم مش مسجل → رجعه للـ login
   else if (to.matched.some(record => record.meta.requiresAuth) && !isAuthenticated) {
     next({ path: "/login" });

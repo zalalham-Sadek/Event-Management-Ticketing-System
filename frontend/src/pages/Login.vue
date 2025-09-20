@@ -173,7 +173,14 @@ const handleLogin = async () => {
     localStorage.setItem('api_token', token)
 
     // Redirect
-    router.push('/dashboard')
+    if (user.role === "Admin" || user.role === "Organizer") {
+      router.push("/dashboard")
+    } else if (user.role === "Attendee") {
+      router.push("/profile")
+    } else {
+      // fallback route if role not matched
+      router.push("/")
+    }
   } catch (error) {
     console.error('Login error:', error.response?.data || error)
     alert(error.response?.data?.message || 'Login failed')
