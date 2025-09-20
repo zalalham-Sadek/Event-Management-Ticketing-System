@@ -271,9 +271,9 @@ export default {
         // For now, we'll just show a success message
         this.showToast('Payment successful! You will receive a confirmation email shortly.', 'success');
         
-        // Redirect to success page or dashboard
+        // Redirect to profile page after successful payment
         setTimeout(() => {
-          this.$router.push('/dashboard');
+          this.$router.push('/profile');
         }, 2000);
         
       } catch (error) {

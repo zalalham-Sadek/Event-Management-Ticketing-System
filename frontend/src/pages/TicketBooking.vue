@@ -279,12 +279,35 @@
 <script>
 import services from "@/services";
 import ToastMessage from "@/components/ToastMessage.vue";
-import Footer from "@/components/Footer.vue";
-
+import { useUserStore } from "@/store/user"
+import { useRouter, useRoute } from "vue-router"
 export default {
   name: 'TicketBooking',
   components: {
     ToastMessage
+  },
+  setup() {
+    const router = useRouter()
+    const route = useRoute()
+    const userStore = useUserStore()
+    const user = userStore.user
+
+    const goToPayment = () => {
+      if (!userStore.isAuthenticated) {
+        alert("You must log in first.")
+        router.push("/login")
+        return
+      }
+
+      if ( userStore.user.role !== 'Attendee') {
+        alert("Only attendees can reserve tickets.")
+        return
+      }
+
+      router.push(`/events/${route.params.eventId}/payment`)
+    }
+
+    return { goToPayment }
   },
   data() {
     return {
@@ -413,10 +436,10 @@ export default {
         this.showToast('Failed to process booking. Please try again.', 'error');
       }
     },
-    goToPayment() {
-      // Navigate directly to payment page
-      this.$router.push(`/events/${this.$route.params.eventId}/payment`);
-    },
+
+
+   
+  
     showToast(message, type = 'success', duration = 3000) {
       this.toastMessage = message;
       this.toastType = type;
