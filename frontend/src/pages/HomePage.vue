@@ -66,7 +66,6 @@
 <FeatureOrganizers/>
 <TestimonialsSection/>
 <StatisticsSection/>
-<Footer/>
 
 </template>
 

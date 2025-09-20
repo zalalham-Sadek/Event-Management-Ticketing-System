@@ -21,7 +21,7 @@
       <h3
         class="text-md font-semibold text-[var(--color-text)]  truncate"
       >
-        {{ event.title }}
+        <router-link :to="event.to">{{ event.title }}</router-link>
       </h3>
 
       <!-- Date & location -->
@@ -72,7 +72,8 @@ defineProps({
       location: "New York",
       price: "$20.00",
       organizer: "Green and Gonzales Trading",
-      organizerLogo: "https://picsum.photos/id/1005/100/100"
+      organizerLogo: "https://picsum.photos/id/1005/100/100",
+      to:"/",
     })
   }
 })

@@ -55,6 +55,7 @@
             price: `$${ticket.price}`,
             organizer: ticket.event.user.name,
             organizerLogo: ticket.event.user.avatar || 'https://picsum.photos/id/1005/100/100',
+            to: `/events/${ticket.event.id}/book`
           }"
         />
       </div>

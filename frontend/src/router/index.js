@@ -17,6 +17,8 @@ import EditEvent from "@/pages/dashboard/events/EditEvent.vue";
 import Tickets from "@/pages/dashboard/tickets/Tickets.vue";
 import AddTicket from "@/pages/dashboard/tickets/AddTicket.vue";
 import EditTicket from "@/pages/dashboard/tickets/EditTicket.vue";
+import TicketBooking from "@/pages/TicketBooking.vue";
+import PaymentPage from "@/pages/PaymentPage.vue";
 
 const routes = [
   {
@@ -24,8 +26,17 @@ const routes = [
     component: LayoutPage,
     children: [
       { path: "", component: Home },
+        {
+    path: "/events/:eventId/book",
+    component: TicketBooking,
+  },
+  {
+    path: "/events/:eventId/payment",
+    component: PaymentPage,
+  },
     ],
   },
+
   {
     path: "/login",
     component: AuthLayout,
