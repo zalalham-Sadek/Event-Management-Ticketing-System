@@ -7,7 +7,9 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
-
+use Illuminate\Support\Facades\DB;
+use App\Mail\VerifyEmail;
+use Illuminate\Support\Facades\Mail;
 class AuthController extends Controller
 {
     public function checkSetup()
@@ -75,13 +77,41 @@ class AuthController extends Controller
         ]);
 
         $token = $user->createToken('api-token')->plainTextToken;
+        // $email_token = Str::random(60);
+        // DB::table('email_verifications')->insert([
+        //     'user_id' => $user->id,
+        //     'token' => $email_token,
+        //     'created_at' => now(),
+        //     'updated_at' => now(),
+        // ]);
 
+        // $verificationUrl = url("/api/verify-email?token={$email_token}");
+        // Mail::to($user->email)->send(new VerifyEmail($verificationUrl));
         return response()->json([
             'message' => 'تم إنشاء الحساب بنجاح',
             'user' => $user,
             'token' => $token
         ], 201);
     }
+    public function verifyEmail(Request $request)
+{
+    $token = $request->token;
+    $record = DB::table('email_verifications')->where('token', $token)->first();
+
+    if (!$record) {
+        return response()->json(['message' => 'رابط التحقق غير صالح'], 400);
+    }
+
+    User::where('id', $record->user_id)->update([
+        'email_verified_at' => now()
+    ]);
+
+    DB::table('email_verifications')->where('token', $token)->delete();
+
+    return response()->json(['message' => 'تم تأكيد البريد الإلكتروني بنجاح']);
+}
+
+
 
     // تسجيل الدخول
     public function login(Request $request)
