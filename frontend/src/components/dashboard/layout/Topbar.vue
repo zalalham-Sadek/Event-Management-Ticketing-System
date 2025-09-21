@@ -1,5 +1,5 @@
 <template>
-  <header class="fixed top-0 left-0 right-0 z-30 h-16 bg-background-secondary shadow-md transition-all duration-300
+  <header class="fixed top-0 left-0 right-0 z-30 h-16 bg-[var(--color-bg)] shadow-md transition-all duration-300
          w-full  flex items-center" :class="sidebarCollapsed ? 'md:ps-20 ' : 'md:ps-64'">
     <div class="flex items-center justify-around w-full pr-4 gap-4 overflow-hidden">
       <!-- Toggle -->

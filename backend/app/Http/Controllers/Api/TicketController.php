@@ -10,35 +10,45 @@ use Illuminate\Support\Facades\Gate;
 class TicketController extends Controller
 {
     /**
-     * Display a listing of tickets for a specific event.
+     * Display a listing of all tickets (Admin only, or Organizer's own events)
      */
-    public function indexAll()
+    public function indexAll(Request $request)
     {
-        $tickets = Ticket::with('event.user')->get();
+        $user = $request->user();
+        $query = Ticket::with('event.user');
+
+        // Filter based on user role
+        if ($user->role === 'Organizer') {
+            // Organizers can only see tickets for their own events
+            $query->whereHas('event', function ($q) use ($user) {
+                $q->where('user_id', $user->id);
+            });
+        }
+        // Admin can see all tickets (no filter needed)
+
+        $tickets = $query->get();
 
         return response()->json([
-            'message' => 'All tickets with events and organizers fetched successfully',
+            'message' => 'Tickets fetched successfully',
             'data' => $tickets
         ], 200);
     }
 
 
-    public function index($eventId)
+    public function index(Request $request, $eventId)
     {
         $event = Event::findOrFail($eventId);
+        $user = $request->user();
 
-        // if (Gate::denies('viewAny', Ticket::class)) {
-        //     return response()->json([
-        //         'message' => 'Unauthorized'
-        //     ], 403);
-        // }
+        // All authenticated users can view tickets for any event (for browsing)
+        // The restriction is only for creating/editing tickets, not viewing them
 
         $tickets = Ticket::where('event_id', $eventId)->get();
 
         return response()->json([
             'message' => 'Tickets fetched successfully',
             'data' => $tickets
-        ],200);
+        ], 200);
     }
 
     /**
@@ -47,6 +57,14 @@ class TicketController extends Controller
     public function store(Request $request, $eventId)
     {
         $event = Event::findOrFail($eventId);
+        $user = $request->user();
+
+        // Check if user can create tickets for this event
+        if ($user->role === 'Organizer' && $event->user_id !== $user->id) {
+            return response()->json([
+                'message' => 'Unauthorized to create tickets for this event',
+            ], 403);
+        }
 
         $ticket = new Ticket();
         $ticket->event_id = $eventId;

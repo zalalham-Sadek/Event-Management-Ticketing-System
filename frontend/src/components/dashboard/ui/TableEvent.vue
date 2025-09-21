@@ -22,63 +22,75 @@
           <td
   v-for="(col, colIndex) in colTitle"
   :key="colIndex"
-  class="px-4 py-4 sm:px-6 text-sm dark:text-secondary-text break-words whitespace-normal max-w-xs"
+  class="px-4 py-4 sm:px-6 text-sm dark:text-secondary-text 
+         break-words whitespace-normal max-w-xs relative"
 >
+  <!-- ✅ Action Column -->
+  <template v-if="col.toLowerCase() === 'action'">
+    <div class="relative inline-block text-left">
+      <!-- Trigger button -->
+      <button
+        @click.stop="toggleDropdown(index)"
+        class="inline-flex justify-center w-full px-3 py-1 text-sm font-medium 
+               dark:text-secondary-text hover:cursor-pointer"
+      >
+        <i class="fas fa-ellipsis-v"></i>
+      </button>
 
-            <template v-if="col.toLowerCase() === 'action'">
-              <div class="relative inline-block text-left">
-                <button
-                  @click.stop="toggleDropdown(index)"
-                  class="inline-flex justify-center w-full px-3 py-1 text-sm font-medium dark:text-secondary-text hover:cursor-pointer"
-                >
-                  <i class="fas fa-ellipsis-v"></i>
-                </button>
-                <div
-                  v-if="openDropdown === index"
-                  class="origin-top-right absolute left-0 mt-2 rounded-md shadow-lg bg-background-secondary z-50 focus:outline-none"
-                >
-                  <div class="py-1 text-sm text-gray-700 dark:text-secondary-text">
-                    <a
-                      href="#"
-                      class="block px-4 py-2 hover:bg-background-primary/30"
-                      @click.prevent="editItem(item)"
-                    >
-                      <i class="fas fa-edit pr-3 text-xs"></i>Edit
-                    </a>
-                    <a
-                      href="#"
-                      class="block px-4 py-2 hover:bg-background-primary/30"
-                      @click.prevent="deleteItem(item)"
-                    >
-                      <i class="fas fa-trash pr-3 text-xs"></i>Delete
-                    </a>
-                    <a
-                      href="#"
-                      class="block px-4 py-2 hover:bg-background-primary/30"
-                      @click.prevent="handleView(item)"
-                    >
-                      <i class="fas fa-eye pr-3 text-xs"></i>View
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </template>
-            <template v-else>
-  <!-- Check if the column is 'poster' -->
-  <template v-if="col.toLowerCase() === 'poster'">
+      <!-- Dropdown -->
+      <div
+        v-if="openDropdown === index"
+        class="absolute right-0 top-full mt-2 w-40 rounded-xl shadow-lg 
+               bg-[var(--color-bg)] ring-1 ring-black/5 z-50 animate-fade-in"
+      >
+        <div class="py-1 text-sm">
+          <a
+            href="#"
+            class="flex items-center gap-2 px-4 py-2 rounded-lg 
+                   hover:bg-primary-border/20 transition-colors"
+            @click.prevent="editItem(item)"
+          >
+            <i class="fas fa-edit text-xs text-blue-500"></i>
+            <span>Edit</span>
+          </a>
+          <a
+            href="#"
+            class="flex items-center gap-2 px-4 py-2 rounded-lg 
+                   hover:bg-primary-border/20 transition-colors"
+            @click.prevent="deleteItem(item)"
+          >
+            <i class="fas fa-trash text-xs text-red-500"></i>
+            <span>Delete</span>
+          </a>
+          <a
+            href="#"
+            class="flex items-center gap-2 px-4 py-2 rounded-lg 
+                   hover:bg-primary-border/20 transition-colors"
+            @click.prevent="handleView(item)"
+          >
+            <i class="fas fa-eye text-xs text-green-500"></i>
+            <span>View</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </template>
+
+  <!-- ✅ Poster column -->
+  <template v-else-if="col.toLowerCase() === 'poster'">
     <img
-      :src="'http://127.0.0.1:8000/storage/'+item[col.toLowerCase()]"
+      :src="'http://127.0.0.1:8000/storage/' + item[col.toLowerCase()]"
       alt="Poster"
       class="w-16 h-16 object-cover rounded-md"
     />
   </template>
+
+  <!-- ✅ Default column -->
   <template v-else>
     {{ item[col.toLowerCase()] }}
   </template>
-</template>
+</td>
 
-            
-          </td>
         </tr>
       </tbody>
     </table>

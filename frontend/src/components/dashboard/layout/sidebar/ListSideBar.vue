@@ -1,6 +1,6 @@
 <template>
     <nav class="mt-4 space-y-5 text-white px-8 py-4">
-        <ItemList label="Dashboard" :sidebarCollapsed="sidebarCollapsed" href="/">
+        <ItemList label="Dashboard" :sidebarCollapsed="sidebarCollapsed" href="/dashboard">
             <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2M5 19V5h6v14zm14 0h-6v-7h6zm0-9h-6V5h6z"/></svg>
             </span>
             <!-- <span v-if="!sidebarCollapsed" class="text-[18px] ">Dashboard</span> -->
@@ -10,10 +10,14 @@
             </span>
             <!-- <span v-if="!sidebarCollapsed" class="text-[18px] ">Dashboard</span> -->
         </ItemList>
-        <ItemList label="Tickets" :sidebarCollapsed="sidebarCollapsed" href="/events/tickets">
+        <!-- <ItemList label="Tickets" :sidebarCollapsed="sidebarCollapsed" href="/events/tickets">
             <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M9 5a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c2.67 0 8 1.34 8 4v2H1v-2c0-2.66 5.33-4 8-4m7.76-9.64c2.02 2.2 2.02 5.25 0 7.27l-1.68-1.69c.84-1.18.84-2.71 0-3.89zM20.07 2c3.93 4.05 3.9 10.11 0 14l-1.63-1.63c2.77-3.18 2.77-7.72 0-10.74z"/></svg>
             </span>
-            <!-- <span v-if="!sidebarCollapsed" class="text-[18px] ">Dashboard</span> -->
+            <span v-if="!sidebarCollapsed" class="text-[18px] ">Dashboard</span>
+        </ItemList> -->
+        <ItemList label="Orders" :sidebarCollapsed="sidebarCollapsed" href="/orders">
+            <span><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="currentColor" d="M7 4V2a1 1 0 0 1 2 0v2h6V2a1 1 0 0 1 2 0v2h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2m0 2H5v14h14V6h-2v2a1 1 0 0 1-2 0V6H9v2a1 1 0 0 1-2 0V6z"/></svg>
+            </span>
         </ItemList>
 
         <!-- Users - Only visible to admin -->

@@ -100,10 +100,16 @@
           
           <!-- Reserve Spot Button -->
           <button
-            @click="goToPayment"
-            class="w-full bg-[var(--color-primary)] hover:bg-[var(--color-text)] text-white py-3 px-6 rounded-lg font-semibold transition-colors"
+            @click="handleReserveSpot"
+            :disabled="totalSelectedTickets === 0"
+            :class="[
+              'w-full py-3 px-6 rounded-lg font-semibold transition-colors',
+              totalSelectedTickets > 0 
+                ? 'bg-[var(--color-primary)] hover:bg-[var(--color-text)] text-white' 
+                : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+            ]"
           >
-            Reserve a Spot
+            {{ totalSelectedTickets > 0 ? `Reserve ${totalSelectedTickets} Ticket${totalSelectedTickets > 1 ? 's' : ''}` : 'Select Tickets First' }}
           </button>
 
           <!-- Ticket Information -->
@@ -116,7 +122,13 @@
             </div>
             
             <div class="space-y-4">
-              <div v-for="ticket in tickets" :key="ticket.id" class="border border-gray-200 dark:border-gray-600 rounded-lg p-4">
+              <div v-for="ticket in tickets" :key="ticket.id" 
+                   :class="[
+                     'border rounded-lg p-4 transition-colors',
+                     (selectedTickets[ticket.id] || 0) > 0 
+                       ? 'border-[var(--color-primary)] bg-blue-50 dark:bg-blue-900/20' 
+                       : 'border-gray-200 dark:border-gray-600'
+                   ]">
                 <div class="flex justify-between items-center mb-2">
                   <h4 class="font-medium text-gray-900 dark:text-white">{{ ticket.type }}</h4>
                   <span class="text-sm text-gray-500">{{ ticket.remaining }} left</span>
@@ -131,7 +143,7 @@
                     >
                       <i class="fas fa-minus text-xs"></i>
                     </button>
-                    <span class="w-8 text-center">{{ selectedTickets[ticket.id] || 0 }}</span>
+                    <span class="w-8 text-center font-semibold">{{ selectedTickets[ticket.id] || 0 }}</span>
                     <button
                       @click="increaseQuantity(ticket.id)"
                       :disabled="selectedTickets[ticket.id] >= ticket.remaining"
@@ -140,6 +152,9 @@
                       <i class="fas fa-plus text-xs"></i>
                     </button>
                   </div>
+                </div>
+                <div v-if="(selectedTickets[ticket.id] || 0) > 0" class="mt-2 text-sm text-[var(--color-primary)] font-medium">
+                  Selected: {{ selectedTickets[ticket.id] }} × ${{ ticket.price }} = ${{ (selectedTickets[ticket.id] * ticket.price).toFixed(2) }}
                 </div>
               </div>
             </div>
@@ -290,7 +305,6 @@ export default {
     const router = useRouter()
     const route = useRoute()
     const userStore = useUserStore()
-    const user = userStore.user
 
     const goToPayment = () => {
       if (!userStore.isAuthenticated) {
@@ -304,6 +318,8 @@ export default {
         return
       }
 
+      // We'll handle the ticket selection check in the method instead
+      // since we can't access this.selectedTickets from setup
       router.push(`/events/${route.params.eventId}/payment`)
     }
 
@@ -427,6 +443,9 @@ export default {
       }
 
       try {
+        // Store selected tickets in localStorage
+        localStorage.setItem(`selectedTickets_${this.$route.params.eventId}`, JSON.stringify(this.selectedTickets));
+        
         // Close the modal and redirect to payment page
         this.showBookingModal = false;
         this.$router.push(`/events/${this.$route.params.eventId}/payment`);
@@ -447,6 +466,19 @@ export default {
       setTimeout(() => {
         this.toastVisible = false;
       }, duration);
+    },
+    handleReserveSpot() {
+      // Check if any tickets are selected
+      if (this.totalSelectedTickets === 0) {
+        this.showToast('Please select at least one ticket before proceeding to payment.', 'error');
+        return;
+      }
+
+      // Store selected tickets in localStorage
+      localStorage.setItem(`selectedTickets_${this.$route.params.eventId}`, JSON.stringify(this.selectedTickets));
+      
+      // Navigate to payment page
+      this.$router.push(`/events/${this.$route.params.eventId}/payment`);
     }
   }
 };

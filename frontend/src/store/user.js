@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import api from '@/services/api'
 
 export const useUserStore = defineStore('user', {
   state: () => ({
@@ -24,25 +25,29 @@ export const useUserStore = defineStore('user', {
       this.user = null
       this.isAuthenticated = false
       localStorage.removeItem('user')
+      localStorage.removeItem('api_token')
     },
 
     loadUserFromStorage() {
       const savedUser = localStorage.getItem('user')
-      if (savedUser) {
+      const savedToken = localStorage.getItem('api_token')
+      
+      if (savedUser && savedToken) {
         this.user = JSON.parse(savedUser)
         this.isAuthenticated = true
+      } else {
+        // Clear any partial data if token is missing
+        this.logout()
       }
     },
-    actions: {
-  async fetchCurrentUser() {
-    try {
-      const response = await api.get('/user')
-      this.login(response.data) // update store
-    } catch (error) {
-      this.logout() // clear store if not authenticated
-    }
-  }
-}
 
+    async fetchCurrentUser() {
+      try {
+        const response = await api.get('/user')
+        this.login(response.data) // update store
+      } catch (error) {
+        this.logout() // clear store if not authenticated
+      }
+    }
   }
 })

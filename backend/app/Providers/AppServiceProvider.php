@@ -6,8 +6,10 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Gate;
 use App\Models\Event;
 use App\Models\Ticket;
+use App\Models\Order;
 use App\Policies\EventPolicy;
 use App\Policies\TicketPolicy;
+use App\Policies\OrderPolicy;
 class AppServiceProvider extends ServiceProvider
 {
 
@@ -35,5 +37,6 @@ class AppServiceProvider extends ServiceProvider
     // Register model policies
     Gate::policy(Event::class, EventPolicy::class);
     Gate::policy(Ticket::class, TicketPolicy::class);
+    Gate::policy(Order::class, OrderPolicy::class);
     }
 }

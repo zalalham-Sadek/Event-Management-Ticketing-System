@@ -13,22 +13,37 @@ use Illuminate\Support\Facades\Gate;
 class EventController extends Controller
 {
     // List all events
-    public function index()
+    public function index(Request $request)
     {
-        $events = Event::with('user')->get();
+        $user = $request->user();
+        $query = Event::with('user');
+
+        // Filter based on user role
+        if ($user->role === 'Organizer') {
+            // Organizers can only see their own events
+            $query->where('user_id', $user->id);
+        }
+        // Admin can see all events (no filter needed)
+
+        $events = $query->get();
         return response()->json(['success' => true, 'data' => $events]);
     }
 
     // Show single event
-// EventController.php
-public function show($id)
-{
-    $event = Event::with('user:id,name,role')->findOrFail($id);
+    public function show(Request $request, $id)
+    {
+        $event = Event::with('user:id,name,role')->findOrFail($id);
+        
+        // Check authorization
+        if (Gate::denies('view', $event)) {
+            return response()->json(['success' => false, 'message' => 'Unauthorized to view this event'], 403);
+        }
 
-    return response()->json([
-        'data' => $event
-    ]);
-}
+        return response()->json([
+            'success' => true,
+            'data' => $event
+        ]);
+    }
 
 public function getEventTypes()
 {

@@ -21,8 +21,8 @@ class TicketPolicy
      */
     public function view(User $user, Ticket $ticket): bool
     {
-        return $user->role === 'Admin'
-            || ($user->role === 'Organizer' && $user->id === $ticket->event->user_id);
+        // All authenticated users can view tickets (for browsing and purchasing)
+        return in_array($user->role, ['Admin', 'Organizer', 'Attendee']);
     }
 
     /**

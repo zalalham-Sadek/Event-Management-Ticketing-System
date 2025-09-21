@@ -38,6 +38,6 @@ const userStore = useUserStore()
 console.log('Role from store:', userStore.userRole)
 
 const showButton = computed(() => 
-  props.enableBtn && userStore.isAuthenticated && userStore.userRole.toLowerCase() === 'admin'
+  props.enableBtn && userStore.isAuthenticated && (userStore.userRole.toLowerCase() === 'admin' || userStore.userRole.toLowerCase() === 'organizer')
 )
 </script>
