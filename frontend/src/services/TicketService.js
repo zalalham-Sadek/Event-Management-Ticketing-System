@@ -37,10 +37,20 @@ const TicketService = {
     return api.get('/user/tickets');
   },
 
-  // Purchase ticket
+  // Purchase ticket (legacy method - use OrderService.createOrder instead)
   purchaseTicket(eventId, ticketId, quantity) {
     return api.post(`/events/${eventId}/tickets/${ticketId}/purchase`, {
       quantity: quantity
+    });
+  },
+
+  // Purchase multiple tickets (create order)
+  purchaseTickets(eventId, items, paymentMethod = null, notes = null) {
+    return api.post('/orders', {
+      event_id: eventId,
+      items: items,
+      payment_method: paymentMethod,
+      notes: notes
     });
   }
 

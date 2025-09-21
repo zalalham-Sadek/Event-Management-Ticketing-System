@@ -46,6 +46,14 @@ class User extends Authenticatable
     }
 
     /**
+     * علاقة الطلبات (Orders) للمستخدم
+     */
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
+    /**
      * تحقق إذا كان المستخدم Admin
      */
     public function isAdmin(): bool

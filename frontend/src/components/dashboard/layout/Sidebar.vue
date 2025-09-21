@@ -74,8 +74,14 @@ function toggleCollapse() {
 const userStore = useUserStore()
 const router = useRouter()
 
-function handleLogout() {
-  userStore.logout()
-  router.push('/login')
-}
+const handleLogout = () => {
+      // Clear user data from store
+      userStore.logout();
+      
+      // Clear any additional tokens or data
+      localStorage.removeItem('api_token');
+      
+      // Redirect to login page
+      router.push('/login');
+    };
 </script>

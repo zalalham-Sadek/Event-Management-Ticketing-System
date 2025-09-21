@@ -13,7 +13,7 @@ class EventPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return in_array($user->role, ['Admin', 'Organizer', 'Attendee']);
     }
 
     /**
@@ -21,7 +21,8 @@ class EventPolicy
      */
     public function view(User $user, Event $event): bool
     {
-        return false;
+        // All authenticated users can view events (for browsing and reference)
+        return in_array($user->role, ['Admin', 'Organizer', 'Attendee']);
     }
 
     /**

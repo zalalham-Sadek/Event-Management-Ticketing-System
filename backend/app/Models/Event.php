@@ -29,4 +29,10 @@ public function tickets()
     public function attendees() {
         return $this->belongsToMany(User::class, 'event_attendees');
     }
+
+    // Orders for this event
+    public function orders()
+    {
+        return $this->hasMany(Order::class);
+    }
 }

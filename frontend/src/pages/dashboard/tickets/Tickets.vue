@@ -62,6 +62,7 @@ import SearchAndPerpage from '@/components/dashboard/ui/SearchAndPerpage.vue'
 import HeadPage from '@/components/dashboard/ui/HeadPage.vue'
 import DynamicTable from '@/components/dashboard/ui/TableEvent.vue'
 import Pagination from '@/components/dashboard/ui/Pagination.vue'
+import ToastMessage from '@/components/ToastMessage.vue'
 
 // Router and user store
 const router = useRouter()
@@ -99,11 +100,52 @@ const loadTickets = async () => {
   error.value = ''
   
   try {
-    const response = await services.TicketService.getAll('eventId') // replace eventId dynamically if needed
-    tickets.value = Array.isArray(response.data) ? response.data : response.data.data || []
+    const response = await services.TicketService.getAllTickets()
+    console.log('Raw Tickets API Response:', response)
+    
+    // Handle different response structures
+    let ticketsData = []
+    if (response.data) {
+      // If response.data is an array, use it directly
+      if (Array.isArray(response.data)) {
+        ticketsData = response.data
+      } 
+      // If response.data has a data property, use that
+      else if (response.data.data && Array.isArray(response.data.data)) {
+        ticketsData = response.data.data
+      }
+      // If response.data has items property, use that
+      else if (response.data.items && Array.isArray(response.data.items)) {
+        ticketsData = response.data.items
+      }
+    }
+    
+    tickets.value = ticketsData
+    console.log('Processed Tickets:', tickets.value)
   } catch (err) {
     console.error('Error loading tickets:', err)
     error.value = 'Failed to load tickets. Please try again.'
+    // Add some sample data for testing
+    tickets.value = [
+      {
+        id: 1,
+        type: 'General Admission',
+        price: 50.00,
+        quantity: 100,
+        sold: 25,
+        remaining: 75,
+        created_at: '2024-01-15T10:30:00Z'
+      },
+      {
+        id: 2,
+        type: 'VIP',
+        price: 100.00,
+        quantity: 50,
+        sold: 10,
+        remaining: 40,
+        created_at: '2024-01-15T10:30:00Z'
+      }
+    ]
   } finally {
     loading.value = false
   }
@@ -138,17 +180,7 @@ watch(itemsPerPage, () => { currentPage.value = 1 })
 
 // Methods
 const refreshTickets = async () => {
-  loading.value = true
-  error.value = ''
-  try {
-    const response = await services.TicketService.getAllTickets()
-    tickets.value = Array.isArray(response.data) ? response.data : response.data.data || []
-  } catch (err) {
-    console.error('Error refreshing tickets:', err)
-    error.value = 'Failed to load tickets. Please try again.'
-  } finally {
-    loading.value = false
-  }
+  await loadTickets()
 }
 
 const editTicket = (ticket) => {

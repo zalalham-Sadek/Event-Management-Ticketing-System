@@ -3,6 +3,14 @@
     <!-- Header -->
     
 
+    <!-- Loading Overlay -->
+    <div v-if="loading" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-8 text-center">
+        <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mb-4"></div>
+        <p class="text-gray-600">Loading payment page...</p>
+      </div>
+    </div>
+
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
             <div class="relative my-8">
@@ -23,9 +31,18 @@
           </div>
           
           <div class="p-6">
-            <!-- Ticket Number -->
+            <!-- Selected Tickets Summary -->
             <div class="mb-6">
-              <p class="text-blue-600 font-medium">Ticket number 1</p>
+              <p class="text-blue-600 font-medium">Selected Tickets ({{ totalSelectedTickets }})</p>
+              <div class="mt-2 space-y-2">
+                <div v-for="ticket in tickets" :key="ticket.id" v-if="ticket && selectedTickets[ticket.id] > 0" class="flex justify-between items-center bg-gray-50 p-2 rounded">
+                  <span class="text-sm">{{ ticket.type }} x{{ selectedTickets[ticket.id] }}</span>
+                  <span class="text-sm font-medium">${{ (ticket.price * selectedTickets[ticket.id]).toFixed(2) }}</span>
+                </div>
+                <div v-if="tickets.length === 0" class="text-gray-500 text-sm">
+                  Loading tickets...
+                </div>
+              </div>
             </div>
 
             <!-- Form Fields -->
@@ -75,17 +92,25 @@
               <!-- Payment Summary -->
               <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 space-y-3">
                 <div class="flex justify-between items-center">
-                  <span class="text-gray-600 dark:text-gray-300">Ticket Price:</span>
-                  <span class="font-semibold text-gray-900 dark:text-white">${{ ticketPrice.toFixed(2) }}</span>
+                  <span class="text-gray-600 dark:text-gray-300">Number of Tickets:</span>
+                  <span class="font-semibold text-gray-900 dark:text-white">{{ totalSelectedTickets }}</span>
                 </div>
                 <div class="flex justify-between items-center">
-                  <span class="text-gray-600 dark:text-gray-300">Number of Ticket:</span>
-                  <span class="font-semibold text-gray-900 dark:text-white">{{ numberOfTickets }}</span>
+                  <span class="text-gray-600 dark:text-gray-300">Subtotal:</span>
+                  <span class="font-semibold text-gray-900 dark:text-white">${{ totalPrice.toFixed(2) }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-600 dark:text-gray-300">Service Fee (5%):</span>
+                  <span class="font-semibold text-gray-900 dark:text-white">${{ (totalPrice * 0.05).toFixed(2) }}</span>
+                </div>
+                <div class="flex justify-between items-center">
+                  <span class="text-gray-600 dark:text-gray-300">Tax (10%):</span>
+                  <span class="font-semibold text-gray-900 dark:text-white">${{ (totalPrice * 0.1).toFixed(2) }}</span>
                 </div>
                 <div class="border-t border-gray-200 dark:border-gray-600 pt-3">
                   <div class="flex justify-between items-center">
                     <span class="text-lg font-semibold text-gray-900 dark:text-white">Total:</span>
-                    <span class="text-xl font-bold text-gray-900 dark:text-white">${{ totalPrice.toFixed(2) }}</span>
+                    <span class="text-xl font-bold text-gray-900 dark:text-white">${{ (totalPrice * 1.15).toFixed(2) }}</span>
                   </div>
                 </div>
               </div>
@@ -100,12 +125,16 @@
               <!-- Purchase Button -->
               <button
                 type="submit"
-                :disabled="isProcessing || paymentTimeLeft <= 0"
+                :disabled="isProcessing || paymentTimeLeft <= 0 || tickets.length === 0 || totalSelectedTickets === 0"
                 class="w-full bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white py-3 px-6 rounded-lg font-semibold transition-colors"
               >
                 <span v-if="isProcessing">
                   <i class="fas fa-spinner fa-spin mr-2"></i>Processing...
                 </span>
+                <span v-else-if="tickets.length === 0">
+                  <i class="fas fa-spinner fa-spin mr-2"></i>Loading...
+                </span>
+                <span v-else-if="totalSelectedTickets === 0">Select Tickets First</span>
                 <span v-else>Purchase</span>
               </button>
             </form>
@@ -176,6 +205,7 @@
 
 <script>
 import services from "@/services";
+import OrderService from "@/services/OrderService";
 import ToastMessage from "@/components/ToastMessage.vue";
 
 export default {
@@ -186,13 +216,14 @@ export default {
   data() {
     return {
       event: {},
+      tickets: [],
+      selectedTickets: {},
+      loading: true,
       form: {
         firstName: '',
         lastName: '',
         email: ''
       },
-      ticketPrice: 15.00,
-      numberOfTickets: 1,
       paymentTimeLeft: 20, // minutes
       isProcessing: false,
       toastMessage: '',
@@ -202,8 +233,32 @@ export default {
     };
   },
   computed: {
+    totalSelectedTickets() {
+      if (!this.selectedTickets || Object.keys(this.selectedTickets).length === 0) {
+        return 0;
+      }
+      return Object.values(this.selectedTickets).reduce((total, count) => total + (count || 0), 0);
+    },
     totalPrice() {
-      return this.ticketPrice * this.numberOfTickets;
+      if (!this.tickets || this.tickets.length === 0) {
+        return 0;
+      }
+      return this.tickets.reduce((total, ticket) => {
+        if (!ticket || !ticket.id) return total;
+        const quantity = this.selectedTickets[ticket.id] || 0;
+        return total + ((ticket.price || 0) * quantity);
+      }, 0);
+    },
+    orderItems() {
+      if (!this.tickets || this.tickets.length === 0) {
+        return [];
+      }
+      return this.tickets
+        .filter(ticket => ticket && ticket.id && this.selectedTickets[ticket.id] > 0)
+        .map(ticket => ({
+          ticket_id: ticket.id,
+          quantity: this.selectedTickets[ticket.id]
+        }));
     }
   },
   async mounted() {
@@ -217,11 +272,19 @@ export default {
   },
   methods: {
     async loadEventData() {
+      this.loading = true;
       try {
         const eventId = this.$route.params.eventId;
         if (eventId) {
+          // Load event details
           const eventResponse = await services.EventService.getEventById(eventId);
           this.event = eventResponse.data.data;
+          
+          // Load tickets for this event
+          const ticketsResponse = await services.TicketService.getAll(eventId);
+          this.tickets = ticketsResponse.data.data || [];
+          // Load selected tickets from URL parameters or localStorage
+          this.loadSelectedTickets();
         }
       } catch (error) {
         console.error('Error loading event data:', error);
@@ -231,6 +294,51 @@ export default {
           date: '2025-10-04',
           location: 'Mumbai, Maharashtra, India'
         };
+        this.tickets = [
+          {
+            id: 1,
+            type: 'General Admission',
+            price: 15.00,
+            remaining: 100
+          }
+        ];
+        this.selectedTickets = { 1: 1 };
+      } finally {
+        this.loading = false;
+      }
+    },
+    loadSelectedTickets() {
+      // Try to get selected tickets from URL parameters first
+      const urlParams = new URLSearchParams(window.location.search);
+      const selectedTicketsParam = urlParams.get('selectedTickets');
+      
+      if (selectedTicketsParam) {
+        try {
+          this.selectedTickets = JSON.parse(decodeURIComponent(selectedTicketsParam));
+        } catch (error) {
+          console.error('Error parsing selected tickets from URL:', error);
+          this.setDefaultSelectedTickets();
+        }
+      } else {
+        // Try to get from localStorage
+        const storedTickets = localStorage.getItem(`selectedTickets_${this.$route.params.eventId}`);
+        if (storedTickets) {
+          try {
+            this.selectedTickets = JSON.parse(storedTickets);
+          } catch (error) {
+            console.error('Error parsing selected tickets from localStorage:', error);
+            this.setDefaultSelectedTickets();
+          }
+        } else {
+          this.setDefaultSelectedTickets();
+        }
+      }
+    },
+    setDefaultSelectedTickets() {
+      // Set default selection (first available ticket, quantity 1)
+      this.selectedTickets = {};
+      if (this.tickets && this.tickets.length > 0 && this.tickets[0] && this.tickets[0].id) {
+        this.selectedTickets[this.tickets[0].id] = 1;
       }
     },
     getPosterUrl(filename) {
@@ -261,15 +369,43 @@ export default {
         return;
       }
 
+      if (this.totalSelectedTickets === 0) {
+        this.showToast('Please select at least one ticket.', 'error');
+        return;
+      }
+
       this.isProcessing = true;
 
       try {
+        // Create the order
+        const orderData = {
+          event_id: parseInt(this.$route.params.eventId),
+          items: this.orderItems,
+          payment_method: 'card', // You can make this dynamic
+          notes: `Customer: ${this.form.firstName} ${this.form.lastName} (${this.form.email})`
+        };
+
+        console.log('Creating order with data:', orderData);
+        
+        const orderResponse = await OrderService.createOrder(orderData);
+        const order = orderResponse.data.data;
+        
+        console.log('Order created successfully:', order);
+        
         // Simulate payment processing
         await new Promise(resolve => setTimeout(resolve, 2000));
         
-        // Here you would integrate with a real payment gateway
-        // For now, we'll just show a success message
-        this.showToast('Payment successful! You will receive a confirmation email shortly.', 'success');
+        // Update order payment status to paid
+        await OrderService.updateOrder(order.id, {
+          payment_status: 'paid',
+          payment_reference: `PAY_${Date.now()}`,
+          status: 'confirmed'
+        });
+        
+        // Clear selected tickets from localStorage
+        localStorage.removeItem(`selectedTickets_${this.$route.params.eventId}`);
+        
+        this.showToast(`Payment successful! Order #${order.order_number} has been confirmed.`, 'success');
         
         // Redirect to profile page after successful payment
         setTimeout(() => {
