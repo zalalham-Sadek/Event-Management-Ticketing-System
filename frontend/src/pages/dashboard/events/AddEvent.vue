@@ -21,7 +21,7 @@
             <div>
               <select
                 v-model="newEvent.type"
-                class="appearance-none w-full pl-4 pr-4 py-2 text-sm rounded-xl border border-primary-border dark:border-gray-600 bg-background-secondary text-secondary-text focus:outline-none focus:ring-2 focus:ring-primary-border"
+                class="appearance-none w-full pl-4 pr-4 py-2 text-sm rounded-xl border border-primary-border dark:border-gray-600 bg-background-secondary text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-border"
               >
                 <option value="" disabled>Select Event Type</option>
                 <option v-for="type in eventTypes" :key="type" :value="type">{{ type }}</option>
@@ -47,7 +47,7 @@
                 type="file"
                 @change="handleFileUpload"
                 accept="image/*"
-                class="w-full px-4 py-2 border border-primary-border rounded-xl bg-background-secondary text-secondary-text"
+                class="w-full px-4 py-2 border border-primary-border rounded-xl bg-background-secondary text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-border"
               />
               <p v-if="submitted && errors.poster" class="text-red-500 text-xs pl-3">{{ errors.poster }}</p>
 
@@ -67,7 +67,7 @@
                 v-model="newEvent.description"
                 rows="3"
                 placeholder="Enter Event Description"
-                class="appearance-none w-full px-4 py-2 text-sm rounded-xl border border-primary-border dark:border-gray-600 bg-background-secondary text-secondary-text focus:outline-none focus:ring-2 focus:ring-primary-border"
+                class="appearance-none w-full px-4 py-2 text-sm rounded-xl border border-primary-border dark:border-gray-600 bg-background-secondary text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-border"
               ></textarea>
               <p v-if="submitted && errors.description" class="text-red-500 text-xs pl-3">{{ errors.description }}</p>
             </div>

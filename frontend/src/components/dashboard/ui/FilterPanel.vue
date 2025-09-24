@@ -1,5 +1,5 @@
 <template>
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-5 border-b border-gray-300 pb-5">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 px-5 border-b border-[var(--color-border)] pb-5">
     <SelectField
       icon="fas fa-chevron-down"
       :modelValue="filters.type"

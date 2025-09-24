@@ -3,7 +3,7 @@
     <select
       :value="modelValue"
       @change="handleChange($event)"
-      class="appearance-none w-full px-4 py-2 pr-10 text-sm rounded-md border border-primary-border dark:border-gray-600 bg-background-secondary  text-secondary-text focus:outline-none focus:ring-2  focus:ring-primary-border"
+      class="appearance-none w-full px-4 py-2 pr-10 text-sm rounded-md border border-primary-border dark:border-gray-600 bg-background-secondary  text-gray-400 focus:outline-none focus:ring-2  focus:ring-primary-border"
     >
       <option :value="5">5</option>
       <option :value="10">10</option>

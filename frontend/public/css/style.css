@@ -13,8 +13,11 @@
   --color-muted: hsla(270, 15%, 50%, 1);
   --color-border: hsla(270, 20%, 88%, 1);
   --color-accent: #dbd0df;
+    --color-icons: var(--color-text);
+      --color-primary-border: #E2E8F0;
   --color-button: #;
   --font-cairo: "Cairo", sans-serif;
+  
 }
 
 @layer base {
@@ -25,7 +28,9 @@
     --color-primary: hsla(258, 85%, 81%, 1);  /* primary color */
     --color-primary-hover: hsla(218, 13%, 83%, 1); /* hover */
     --color-accent: #fafafa;
+    --color-icons: #c5c4c4;
     --color-muted: hsla(240, 10%, 4%, 1);     /* muted dark text */
+        --color-primary-border:#4A5568;
   }
 
   /* Apply font and colors globally */

@@ -11,7 +11,7 @@
             </svg>
           </span>
           <input type="text" placeholder="Search..."
-      class="appearance-none w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-primary-border dark:border-gray-600 bg-background-secondary  text-secondary-text  focus:outline-none focus:ring-2 focus:ring-primary-border"
+      class="appearance-none w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-primary-border dark:border-gray-600 bg-background-secondary  text-gray-400  focus:outline-none focus:ring-2 focus:ring-primary-border"
        /> </div>
       </div>
 </template>

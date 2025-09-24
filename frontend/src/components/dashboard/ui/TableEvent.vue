@@ -1,11 +1,9 @@
 <template>
   <div ref="tableWrapper" class="relative">
     <table class="min-w-full text-sm text-left">
-      <thead class="text-xs text-secondary-text uppercase">
-        <tr class="border-b border-primary-border">
-          <th class="px-4 sm:px-6">#</th>
-          <th v-for="(col, index) in colTitle" :key="index" class="px-4 py-3 sm:px-6 relative">
-            <div class="absolute top-1/4 bottom-1/4 right-0 w-px bg-primary-border"></div>
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+        <tr >
+          <th v-for="(col, index) in colTitle" :key="index" class="px-2 py-3">
             {{ col }}
           </th>
         </tr>
@@ -15,15 +13,12 @@
         <tr
           v-for="(item, index) in paginatedEvents"
           :key="index"
-          class="border-b border-primary-border hover:bg-background-primary/30"
-        >
-          <td class="px-4 py-4 sm:px-6">#</td>
+          class="bg-white border-b dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"        >
 
           <td
   v-for="(col, colIndex) in colTitle"
   :key="colIndex"
-  class="px-4 py-4 sm:px-6 text-sm dark:text-secondary-text 
-         break-words whitespace-normal max-w-xs relative"
+  class="bg-white border-b dark:bg-gray-800 border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600 px-1 py-2 whitespace-nowrap text-sm text-gray-900 dark:text-white"
 >
   <!-- ✅ Action Column -->
   <template v-if="col.toLowerCase() === 'action'">
@@ -86,9 +81,12 @@
   </template>
 
   <!-- ✅ Default column -->
-  <template v-else>
-    {{ item[col.toLowerCase()] }}
-  </template>
+<template v-else>
+  {{ item[col.toLowerCase()]?.length > 100 
+      ? item[col.toLowerCase()].substring(0, 60) + '...' 
+      : item[col.toLowerCase()] }}
+</template>
+
 </td>
 
         </tr>

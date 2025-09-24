@@ -5,7 +5,7 @@
     <BtnMode />
 
     <!-- Notifications -->
-    <span class="text-xl text-secondary-text">
+    <span class="text-xl text-gray-300 cursor-pointer">
       <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
         <path fill="currentColor"
           d="M21 19v1H3v-1l2-2v-6c0-3.1 2.03-5.83 5-6.71V4a2 2 0 0 1 2-2a2 2 0 0 1 2 2v.29c2.97.88 5 3.61 5 6.71v6zM14 21a2 2 0 0 1-4 0"/>
@@ -15,7 +15,7 @@
     <!-- User Dropdown -->
    <!-- User Dropdown -->
 <div v-if="isLoggedIn" class="relative">
-  <router-link to="/profile" class="w-10 h-10 bg-gray-500 rounded-full overflow-hidden block">
+  <router-link to="/profile" class="w-10 h-10  rounded-full overflow-hidden block">
     <img
       v-if="user?.avatar"
       :src="user.avatar"
@@ -25,7 +25,7 @@
     <svg
       v-else
       xmlns="http://www.w3.org/2000/svg"
-      class="w-full h-full text-primary-text object-cover"
+      class="w-full h-full text-gray-300  object-cover"
       viewBox="0 0 24 24"
     >
       <path fill="currentColor"
@@ -52,7 +52,7 @@
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useUserStore } from '@/store/user'
-import BtnMode from './BtnMode.vue'
+import BtnMode from '@/components/BtnMode.vue'
 import { useRouter } from 'vue-router'
 import LanguageSwitcher from '@/components/LanguageSwitcher.vue'
 
