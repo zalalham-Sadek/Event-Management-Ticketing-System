@@ -1,11 +1,19 @@
 <template>
-  <nav class="dark:bg-[var(--color-bg)] bg-[#5d679b] shadow-md sticky top-0 z-50 transition-colors duration-300">
+  <nav class="dark:bg-[var(--color-bg)] bg-[#474f79] shadow-md sticky top-0 z-50 transition-colors duration-300">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between items-center h-16">
 
         <!-- Logo + Menu for desktop -->
         <div class="flex items-center space-x-8">
-          <router-link to="/" class="text-2xl font-bold text-[var(--color-primary)]">🎟️ TicMate</router-link>
+          <div class="flex items-center space-x-3">
+              <div class="w-8 h-8 bg-[var(--color-primary)] rounded-xl flex items-center justify-center">
+                <i class="fas fa-ticket-alt text-white text-l"></i>
+              </div>
+              <div>
+                <h3 class="text-lg md:text-2xl font-bold text-white">TicMate</h3>
+                
+              </div>
+            </div>
 
           <!-- Menu -->
           <div

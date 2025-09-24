@@ -8,8 +8,15 @@
           <path fill="#008f32"
             d="M73.082 110.691L17.523 55.132L0 72.654l73.082 73.082l17.095-17.095l.428-.427L200.868 17.95L183.346.427z" />
         </svg> -->
-        <span class="font-bold text-lg text-primary-text">zalalham</span>
-      </div>
+ <div class="flex items-center space-x-3">
+              <div class="w-12 h-12 bg-[var(--color-primary)] rounded-xl flex items-center justify-center">
+                <i class="fas fa-ticket-alt text-white text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg md:text-xl font-bold text-[var(--color-text)]">TicMate</h3>
+                
+              </div>
+            </div>      </div>
 </template>
 
 <script>

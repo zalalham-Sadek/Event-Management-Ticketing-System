@@ -1,7 +1,7 @@
 <template>
   <!-- Sidebar -->
 <aside
-  class="fixed top-0 start-0 h-full bg-[var(--color-muted)] pt-5 z-40 transition-all duration-300 ease-in-out overflow-hidden flex flex-col justify-between"
+  class="fixed top-0 start-0 h-full  bg-[#fafafb] dark:bg-[#020e1f] pt-5 z-40 transition-all duration-300 ease-in-out overflow-hidden flex flex-col justify-between"
   :class="[
     sidebarCollapsed ? 'w-20' : 'w-64',
     // On small screens: hidden by default; show when open.

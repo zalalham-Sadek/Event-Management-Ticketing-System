@@ -8,7 +8,7 @@
         {{ event.title }}
       </h1>
 
-      <div>
+      <div class="mb-6 text-gray-500 dark:text-gray-300">
         <p class="font-bold py-6">
           <span class="text-xl text-gray-700 dark:text-gray-300">Description:</span> 
           {{ event.description }}

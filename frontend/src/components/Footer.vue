@@ -9,7 +9,7 @@
           <div class="space-y-6">
             <!-- Logo -->
             <div class="flex items-center space-x-3">
-              <div class="w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center">
+              <div class="w-12 h-12 bg-[var(--color-primary)] rounded-xl flex items-center justify-center">
                 <i class="fas fa-ticket-alt text-white text-2xl"></i>
               </div>
               <div>

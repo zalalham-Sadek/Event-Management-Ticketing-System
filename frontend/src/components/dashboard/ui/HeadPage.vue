@@ -2,10 +2,10 @@
   <div class="breadcrumb flex items-center justify-between border-b border-gray-300 dark:border-foreground pb-4 mb-6">
     <!-- المسار -->
     <ul class="flex items-center text-l">
-      <li class="border-r border-primary-border pr-2 text-secondary-text dark:text-black">
-        <a class="hover:text-gray-800" href="#">{{ part }}</a>
+      <li class="border-r border-primary-border pr-2 text-gray-50 dark:text-black">
+        <a class="hover:text-gray-800 text-gray-700 dark:text-gray-50" href="#">{{ part }}</a>
       </li>
-      <li class="pl-2  text-secondary-text/80 dark:text-gray-700">{{ title }}</li>
+      <li class="pl-2  text-gray-400 dark:text-gray-400">{{ title }}</li>
     </ul>
     <div v-if="showButton">
       <Btn :btnTitle="btnTitle" :href="href" />

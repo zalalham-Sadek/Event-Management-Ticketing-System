@@ -6,7 +6,7 @@
     <select
       :value="modelValue"
       @change="$emit('update:modelValue', $event.target.value)"
-      class="appearance-none w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-primary-border dark:border-gray-600 bg-background-secondary  text-secondary-text  focus:outline-none focus:ring-2 focus:ring-primary-border"
+      class="appearance-none w-full pl-10 pr-4 py-2 text-sm text-gray-400 rounded-xl border border-primary-border dark:border-gray-600 bg-background-secondary   focus:outline-none focus:ring-2 focus:ring-primary-border"
     >
   <option value="">All {{ label }}</option> <!-- ← Add this -->
       <option v-for="item in data" :key="getItemValue(item)" :value="getItemValue(item)">{{ getItemLabel(item) }}</option>

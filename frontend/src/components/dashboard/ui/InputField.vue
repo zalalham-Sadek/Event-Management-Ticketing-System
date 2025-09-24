@@ -19,7 +19,7 @@ watch(() => props.modelValue, (val) => {
 
 <template>
   <div class="relative flex items-center w-full">
-    <span v-if="icon" class="absolute left-3 text-secondary-text pointer-events-none">
+    <span v-if="icon" class="absolute left-3 text-gray-400 pointer-events-none">
       <i :class="icon"></i>
     </span>
     <input
@@ -27,7 +27,7 @@ watch(() => props.modelValue, (val) => {
       :placeholder="placeholder"
       v-model="internalValue"
       @input="$emit('update:modelValue', $event.target.value)"
-      class="appearance-none w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-primary-border dark:border-gray-600 bg-background-secondary text-secondary-text focus:outline-none focus:ring-2 focus:ring-primary-border"
+      class="appearance-none w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-primary-border dark:border-gray-600 bg-background-secondary text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-border"
     />
   </div>
 </template>

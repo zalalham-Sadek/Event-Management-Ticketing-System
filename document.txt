@@ -1,0 +1,120 @@
+API Documentation for Your Project
+
+Base URL: /api
+Authentication: Sanctum (for protected routes)
+Response format: JSON
+
+---
+
+1. Admin Setup
+
+GET /setup-admin
+Description: Check if an Admin exists
+Auth: No
+
+POST /setup-admin
+Description: Create the first Admin
+Body: name, email, password, phone?
+Auth: No
+
+---
+
+2. Authentication
+
+POST /register
+Description: Register a new user
+Body: name, email, password, phone?
+Auth: No
+
+POST /login
+Description: Login
+Body: email, password
+Auth: No
+
+POST /forgot-password
+Description: Send password reset link
+Body: email
+Auth: No
+
+POST /logout
+Description: Logout
+Auth: Yes
+
+---
+
+3. User Management
+
+GET /users
+POST /users
+GET /users/{id}
+PUT /users/{id}
+DELETE /users/{id}
+Description: CRUD operations for users
+Auth: Yes
+
+---
+
+4. Events
+
+GET /events
+POST /events
+GET /events/{id}
+PUT /events/{id}
+DELETE /events/{id}
+GET /event-types
+Description: CRUD operations and types for events
+Auth: Yes
+
+---
+
+5. Tickets
+
+GET /tickets
+GET /events/{eventId}/tickets
+POST /events/{eventId}/tickets
+GET /events/{eventId}/tickets/{ticketId}
+PUT /events/{eventId}/tickets/{ticketId}
+DELETE /events/{eventId}/tickets/{ticketId}
+Description: CRUD operations for tickets
+Auth: Yes
+
+---
+
+6. Orders
+
+GET /orders
+POST /orders
+GET /orders/{id}
+PUT /orders/{id}
+DELETE /orders/{id}
+POST /orders/{id}/cancel
+POST /orders/{id}/confirm
+POST /orders/{id}/refund
+GET /orders/{id}/download-tickets
+GET /orders/{id}/download-details
+GET /user/orders
+Description: CRUD and special actions for orders
+Auth: Yes
+
+---
+
+7. Statistics
+
+GET /statistics/dashboard
+Description: Dashboard statistics
+Auth: Yes
+
+---
+
+Notes:
+
+* Protected routes require a Bearer token in headers.
+* Error response format:
+  {
+  "message": "Error message"
+  }
+* Success response format varies depending on endpoint, usually:
+  {
+  "message": "Success message",
+  "user" | "order" | "event" | "ticket": {...}
+  }
