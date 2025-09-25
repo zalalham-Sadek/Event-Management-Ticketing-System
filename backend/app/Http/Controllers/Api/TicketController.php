@@ -85,6 +85,13 @@ class TicketController extends Controller
         $ticket->sold = 0;
         $ticket->save();
 
+        $users = User::where('id', '!=', Auth::id())->get();
+$userName = Auth::user()->name;
+    foreach ($users as $user) {
+        $user->notify(new \App\Notifications\UserActionNotification(
+                        "New ticket (#{$ticket->type}) (#{$ticket->event()->title}) was created by {$userName} ."
+                    ));
+    }
         return response()->json([
             'message' => 'Ticket created successfully',
             'data' => $ticket

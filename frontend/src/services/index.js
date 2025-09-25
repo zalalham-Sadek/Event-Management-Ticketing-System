@@ -6,7 +6,7 @@ import TicketService from './TicketService';
 import OrderService from './OrderService';
 import SpeakerService from './SpeakerService';
 import StatisticsService from './StatisticsService';
-
+import NotificationService from './NotificationService';
 export default {
   api,
   AuthService,
@@ -15,4 +15,5 @@ export default {
   TicketService,
   OrderService,
   StatisticsService,
+  NotificationService,
 };
