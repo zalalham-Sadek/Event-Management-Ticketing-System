@@ -130,7 +130,7 @@ class OrderController extends Controller
             ];
         }
 
-        // Calculate fees (you can customize these based on your business logic)
+        // Calculate fees
         $serviceFee = $subtotal * 0.05; // 5% service fee
         $taxAmount = $subtotal * 0.1; // 10% tax
         $totalAmount = $subtotal + $serviceFee + $taxAmount;
@@ -163,7 +163,6 @@ class OrderController extends Controller
             foreach ($request->items as $item) {
                 $ticket = $tickets[$item['ticket_id']];
 
-                // Double-check availability before updating
                 if ($ticket->remaining < $item['quantity']) {
                     DB::rollBack();
                     return response()->json([
@@ -171,10 +170,8 @@ class OrderController extends Controller
                     ], 422);
                 }
 
-                // Increment sold quantity
                 $ticket->increment('sold', $item['quantity']);
 
-                // Log the transaction for audit purposes
                 \Log::info("Ticket quantity updated", [
                     'ticket_id' => $ticket->id,
                     'ticket_type' => $ticket->type,
@@ -186,8 +183,19 @@ class OrderController extends Controller
             }
 
             DB::commit();
-        // Fire Pusher event
-        event(new OrderEvent($order));
+
+            // Fire Pusher event (real-time broadcast if you want)
+            event(new OrderEvent($order));
+
+            // 🔔 Send notification to Admin
+            $admin = \App\Models\User::where('role', 'Admin')->first();
+            if ($admin) {
+                $admin->notify(
+                    new \App\Notifications\UserActionNotification(
+                        "New order (#{$order->order_number}) was created by {$user->name} for event '{$event->title}'."
+                    )
+                );
+            }
 
             return response()->json([
                 'message' => 'Order created successfully',

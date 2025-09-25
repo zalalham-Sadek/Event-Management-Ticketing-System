@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Event;
+use App\Models\User;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use App\Policies\EventPolicy;
@@ -33,7 +34,7 @@ class EventController extends Controller
     public function show(Request $request, $id)
     {
         $event = Event::with('user:id,name,role')->findOrFail($id);
-        
+
         // Check authorization
         if (Gate::denies('view', $event)) {
             return response()->json(['success' => false, 'message' => 'Unauthorized to view this event'], 403);
@@ -74,7 +75,13 @@ public function getEventTypes()
 
     $data['user_id'] = Auth::id();
     $event = Event::create($data);
-
+$users = User::where('id', '!=', Auth::id())->get();
+$userName = Auth::user()->name;
+    foreach ($users as $user) {
+        $user->notify(new \App\Notifications\UserActionNotification(
+                        "New event (#{$event->title}) was created by {$userName} ."
+                    ));
+    }
     return response()->json(['success' => true, 'data' => $event]);
 }
 

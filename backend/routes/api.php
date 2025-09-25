@@ -8,6 +8,7 @@ use App\Http\Controllers\Api\EventController;
 use App\Http\Controllers\Api\TicketController;
 use App\Http\Controllers\Api\OrderController;
 use App\Http\Controllers\Api\StatisticsController;
+use App\Http\Controllers\Api\NotificationController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -22,17 +23,17 @@ Route::post('/forgot-password', [AuthController::class, 'forgotPassword']);
 // Protected routes
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [AuthController::class, 'logout']);
-    
+
     // User routes
     Route::apiResource('users', UserController::class);
-    
+
     // Event routes
     Route::apiResource('events', EventController::class);
     Route::get('/event-types', [EventController::class, 'getEventTypes']);
-    
+
     // Statistics routes
     Route::get('/statistics/dashboard', [StatisticsController::class, 'getDashboardStats']);
-    
+
     // Ticket routes
     Route::get('/tickets', [TicketController::class, 'indexAll']);
     Route::prefix('events/{eventId}')->group(function () {
@@ -51,4 +52,9 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/orders/{id}/download-tickets', [OrderController::class, 'downloadTickets']);
     Route::get('/orders/{id}/download-details', [OrderController::class, 'downloadOrderDetails']);
     Route::get('/user/orders', [OrderController::class, 'userOrders']);
+});
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/admin/notifications', [NotificationController::class, 'index']);
+    Route::post('/admin/notifications/{id}/mark-read', [NotificationController::class, 'markAsRead']);
 });
